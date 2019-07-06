@@ -2,7 +2,7 @@
     <section>
         <h2>アイドル選択</h2>
         <p>
-            <input type="search" placeholder="アイドル絞り込み" v-model="keyword" v-on:change="search" />
+            <input type="search" placeholder="アイドル絞り込み" v-model="keyword" v-on:keyup="inputText" v-on:change="search" />
         </p>
         <pager v-bind:count="count" v-bind:limit="limit" v-on:change="changePage"></pager>
         <ul>
@@ -49,6 +49,12 @@
                     this.idols = json.results;
                     this.count = json.count;
                 })
+            },
+            inputText: function(event: any) {
+                if (event.isComposing) {
+                    return;
+                }
+                this.search();
             },
             changePage: function(offset: number): void {
                 this.search(offset);
