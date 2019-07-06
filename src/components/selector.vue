@@ -2,7 +2,7 @@
     <section>
         <h2>アイドル選択</h2>
         <p>
-            <input type="search" placeholder="アイドル絞り込み" v-model="keyword" v-on:keyup="inputText" v-on:change="search" />
+            <input type="search" placeholder="アイドル絞り込み" v-model="keyword" v-on:keyup="inputText" v-on:change="search" v-on:search="search" />
         </p>
         <pager v-bind:count="count" v-bind:limit="limit" v-on:change="changePage"></pager>
         <ul>
