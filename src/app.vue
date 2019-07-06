@@ -68,7 +68,7 @@
         <button v-on:click="createImage">画像生成</button>
 
         <modal name="selector">
-            <selector v-bind:name="selected_name" v-on:click="selectIdol"></selector>
+            <selector v-bind:idol_id="selected_id" v-on:click="selectIdol"></selector>
         </modal>
 
         <modal name="result">
@@ -95,7 +95,7 @@
         data: function () {
             return {
                 selected_index: 0,
-                selected_name: "",
+                selected_id: 0,
                 size: "s",
                 row: 3,
                 column: 3,
@@ -111,15 +111,8 @@
         methods: {
             click: function (index: number, idol_id: number): void {
                 this.selected_index = index;
-                if (idol_id == 0) {
-                    this.selected_name = "";
-                    this.$modal.push("selector");
-                } else {
-                    api.getIdol(idol_id).then((json: any) => {
-                        this.selected_name = json.name;
-                        this.$modal.push("selector");
-                    })
-                }
+                this.selected_id = idol_id;
+                this.$modal.push("selector");
 
             },
             selectIdol: function (idol_id: number): void {

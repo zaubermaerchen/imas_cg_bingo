@@ -2,7 +2,7 @@
     <section>
         <h2>アイドル選択</h2>
         <p>
-            <input type="search" placeholder="アイドル絞り込み" v-model="keyword" v-on:keyup="inputText" v-on:change="search" v-on:search="search" />
+            <input type="search" placeholder="アイドル検索" v-model="keyword" v-on:keyup="inputText" v-on:change="search" v-on:search="search" />
         </p>
         <pager v-bind:count="count" v-bind:limit="limit" v-on:change="changePage"></pager>
         <ul>
@@ -24,7 +24,7 @@
             pager
         },
         props: [
-            "name",
+            "idol_id",
         ],
         data: function () {
             return {
@@ -34,11 +34,20 @@
                 limit: 10,
             };
         },
-        mounted: function (): void {
-            this.keyword = this.name;
-            this.search();
+        created: function (): void {
+            this.init();
         },
         methods: {
+            init: function (): void {
+                if (this.idol_id == 0) {
+                    this.search();
+                } else {
+                    api.getIdol(this.idol_id).then((idol: any) => {
+                        this.idols = [idol];
+                        this.count = 1;
+                    })
+                }
+            },
             search: function (offset: number = 0): void {
                 let name: string | null = null;
                 if (this.keyword.length > 0) {
@@ -64,10 +73,9 @@
             }
         },
         watch: {
-            name: {
-                handler(val: string) {
-                    this.keyword = val;
-                    this.search();
+            idol_id: {
+                handler(val: number) {
+                    this.init();
                 }
             }
         }
