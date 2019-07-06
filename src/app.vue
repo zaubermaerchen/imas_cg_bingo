@@ -65,7 +65,7 @@
             <li v-for="(idol_id, index) in idols"><imagebox v-bind:id="idol_id" v-on:click="click(index, idol_id)"></imagebox></li>
         </draggable>
 
-        <button v-on:click="drawCanvas">画像生成</button>
+        <button v-on:click="createImage">画像生成</button>
 
         <modal name="selector">
             <selector v-bind:name="selected_name" v-on:click="selectIdol"></selector>
@@ -136,7 +136,7 @@
                     this.idols = this.idols.concat((new Array(count - this.idols.length)).fill(0));
                 }
             },
-            drawCanvas: function (): void {
+            createImage: function (): void {
                 this.$modal.push("result");
             },
             random: function (): void {
