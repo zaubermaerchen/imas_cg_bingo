@@ -1,16 +1,15 @@
 <template>
     <section>
-        <h2>アイドル選択</h2>
         <p>
             <input type="search" placeholder="アイドル検索" v-model="keyword" v-on:keyup="inputText" v-on:change="search" v-on:search="search" />
         </p>
-        <div class="pager">
-            <el-input-number v-model="page" v-if="getPages() > 1" v-bind:min="1" v-bind:max="getPages()" v-on:change="changePage()" />
-        </div>
         <ul>
             <li v-for="idol in idols"><imagebox v-bind:id="idol.idol_id" v-on:click="click"></imagebox></li>
             <li><imagebox v-bind:id="0" v-on:click="click"></imagebox></li>
         </ul>
+        <div class="pager">
+            <el-input-number v-model="page" v-if="getPages() > 1" v-bind:min="1" v-bind:max="getPages()" v-on:change="changePage()" />
+        </div>
     </section>
 </template>
 
