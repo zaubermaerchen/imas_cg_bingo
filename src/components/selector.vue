@@ -39,7 +39,7 @@
             this.init();
         },
         methods: {
-            init: function (): void {
+            init(): void {
                 if (this.idol_id == 0) {
                     this.search();
                 } else {
@@ -50,7 +50,7 @@
                     })
                 }
             },
-            search: function (offset: number = 0): void {
+            search(offset: number = 0): void {
                 let name: string | null = null;
                 if (this.keyword.length > 0) {
                     name = this.keyword;
@@ -64,7 +64,7 @@
                     }
                 })
             },
-            inputText: function(event: any) {
+            inputText(event: any) {
                 if (event.isComposing) {
                     return;
                 }
@@ -72,18 +72,11 @@
             },
             getPages(): number { return Math.ceil(this.count / this.limit); },
             getOffset(): number { return (this.page - 1) * this.limit; },
-            changePage: function(): void {
+            changePage(): void {
                 this.search(this.getOffset());
             },
             click(idol_id: number): void {
                 this.$emit("click", idol_id);
-            }
-        },
-        watch: {
-            idol_id: {
-                handler(val: number) {
-                    this.init();
-                }
             }
         }
     }

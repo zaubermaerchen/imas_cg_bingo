@@ -145,8 +145,9 @@
             click: function (index: number, idol_id: number): void {
                 this.selected_index = index;
                 this.selected_id = idol_id;
-                this.$modal.push("selector");
-
+                setTimeout(() => {
+                    this.$modal.push("selector");
+                }, 100);
             },
             selectIdol: function (idol_id: number): void {
                 let idols = this.idols.concat();
