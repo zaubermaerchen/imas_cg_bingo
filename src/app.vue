@@ -1,61 +1,37 @@
 <template>
     <section>
-
         <table>
             <tbody>
             <tr>
                 <th>ビンゴ枠数</th>
                 <td>
-                    <select name="row" v-model="row" v-on:change="changeSize">
-                        <option value="1">1行</option>
-                        <option value="2">2行</option>
-                        <option value="3">3行</option>
-                        <option value="4">4行</option>
-                        <option value="5">5行</option>
-                    </select>
+                    <el-select name="row" v-model="row" placeholder="行" v-on:change="changeSize">
+                        <el-option v-for="n in 5" v-bind:key="n" v-bind:value="n" v-bind:label="n + '行'"></el-option>
+                    </el-select>
                     ×
-                    <select name="column" v-model="column" v-on:change="changeSize">
-                        <option value="1">1列</option>
-                        <option value="2">2列</option>
-                        <option value="3">3列</option>
-                        <option value="4">4列</option>
-                        <option value="5">5列</option>
-                    </select>
+                    <el-select name="column" v-model="column" placeholder="column" v-on:change="changeSize">
+                        <el-option v-for="n in 5" v-bind:key="n" v-bind:value="n" v-bind:label="n + '列'"></el-option>
+                    </el-select>
                 </td>
             </tr>
             <tr>
                 <th>カードサイズ</th>
                 <td>
-                    <select name="size" v-model="size">
-                        <option value="s">Sサイズ</option>
-                        <option value="m" selected="selected">Mサイズ</option>
-                        <option value="m2">M2サイズ</option>
-                        <option value="l">Lサイズ</option>
-                        <option value="l2">Lサイズ(SR枠無し)</option>
-                        <option value="ls">短冊</option>
-                        <option value="xs">正方形</option>
-                    </select>
+                    <el-select name="size" v-model="select_size" placeholder="カードサイズ">
+                        <el-option v-for="size in sizes" v-bind:key="size.value" v-bind:value="size.value" v-bind:label="size.label"></el-option>
+                    </el-select>
                 </td>
             </tr>
             <tr>
                 <th>ランダム選択</th>
                 <td>
-                    <select name="select_type" v-model="select_type">
-                        <option value="-1" selected="selected">すべての属性</option>
-                        <option value="0">キュート</option>
-                        <option value="1">クール</option>
-                        <option value="2">パッション</option>
-                    </select>
-                    <select name="select_rarity" v-model="select_rarity">
-                        <option value="-1" selected="selected">すべてのレアリティ</option>
-                        <option value="0">ノーマル</option>
-                        <option value="1">ノーマル+</option>
-                        <option value="2">レア</option>
-                        <option value="3">レア+</option>
-                        <option value="4">Sレア</option>
-                        <option value="5">Sレア+</option>
-                    </select>
-                    <button v-on:click="random">選択</button>
+                    <el-select name="select_type" v-model="select_type" placeholder="属性">
+                        <el-option v-for="type in types" v-bind:key="type.value" v-bind:value="type.value" v-bind:label="type.label"></el-option>
+                    </el-select>
+                    <el-select name="select_rarity" v-model="select_rarity" placeholder="レアリティ">
+                        <el-option v-for="rarity in rarities" v-bind:key="rarity.value" v-bind:value="rarity.value" v-bind:label="rarity.label"></el-option>
+                    </el-select>
+                    <el-button v-on:click="random">選択</el-button>
                 </td>
             </tr>
             </tbody>
@@ -65,14 +41,14 @@
             <li v-for="(idol_id, index) in idols"><imagebox v-bind:id="idol_id" v-on:click="click(index, idol_id)"></imagebox></li>
         </draggable>
 
-        <button v-on:click="createImage">画像生成</button>
+        <el-button type="primary" v-on:click="createImage">画像生成</el-button>
 
         <modal name="selector">
             <selector v-bind:idol_id="selected_id" v-on:click="selectIdol"></selector>
         </modal>
 
         <modal name="result">
-            <result v-bind:idols="idols" v-bind:row="row" v-bind:column="column" v-bind:size="size"></result>
+            <result v-bind:idols="idols" v-bind:row="row" v-bind:column="column" v-bind:size="select_size"></result>
         </modal>
     </section>
 </template>
@@ -96,11 +72,68 @@
             return {
                 selected_index: 0,
                 selected_id: 0,
-                size: "s",
+                select_size: "m",
                 row: 3,
                 column: 3,
                 select_type: -1,
                 select_rarity: -1,
+                sizes: [{
+                    value: "s",
+                    label: "Sサイズ"
+                }, {
+                    value: "m",
+                    label: "Mサイズ"
+                }, {
+                    value: "m2",
+                    label: "M2サイズ"
+                }, {
+                    value: "l",
+                    label: "Lサイズ"
+                }, {
+                    value: "l2",
+                    label: "Lサイズ(SR枠無し)"
+                }, {
+                    value: "ls",
+                    label: "短冊"
+                }, {
+                    value: "xs",
+                    label: "正方形"
+                }],
+                types: [{
+                    value: -1,
+                    label: 'すべての属性'
+                }, {
+                    value: 0,
+                    label: 'キュート'
+                }, {
+                    value: 1,
+                    label: 'クール'
+                }, {
+                    value: 2,
+                    label: 'パッション'
+                }],
+                rarities: [{
+                    value: -1,
+                    label: 'すべてのレアリティ'
+                }, {
+                    value: 0,
+                    label: 'ノーマル'
+                }, {
+                    value: 1,
+                    label: 'ノーマル+'
+                }, {
+                    value: 2,
+                    label: 'レア'
+                }, {
+                    value: 3,
+                    label: 'レア+'
+                }, {
+                    value: 4,
+                    label: 'Sレア'
+                }, {
+                    value: 5,
+                    label: 'Sレア+'
+                }],
                 idols: [],
                 image_path: ""
             };
@@ -162,18 +195,5 @@
         flex-wrap: wrap;
         max-width: 500px;
         padding: 0;
-    }
-    tr {
-        height: 2.5em;
-    }
-    select {
-        font-size: 16px;
-    }
-    button {
-        font-size: 16px;
-        border-radius: 3px;
-        box-shadow: none;
-        padding: .5em 2em;
-        border: 1px solid #bbb;
     }
 </style>
