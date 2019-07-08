@@ -106,8 +106,9 @@
         flex-wrap: wrap;
         font-size: 0;
         margin-top: 20px;
+        margin-bottom: 20px;
         padding: 0;
-        height: 300px;
+        min-height: 300px;
     }
     ul > li {
         margin: 0;

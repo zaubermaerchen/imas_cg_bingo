@@ -46,6 +46,7 @@
 <style scoped>
     section {
         text-align: center;
+        max-width: 100%;
     }
     img {
         max-width: 100%;
