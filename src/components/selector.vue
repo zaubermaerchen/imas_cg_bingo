@@ -7,9 +7,8 @@
             <li v-for="idol in idols"><imagebox v-bind:id="idol.idol_id" v-on:click="click"></imagebox></li>
             <li><imagebox v-bind:id="0" v-on:click="click"></imagebox></li>
         </ul>
-        <div class="pager">
-            <el-input-number v-model="page" v-if="getPages() > 1" v-bind:min="1" v-bind:max="getPages()" v-on:change="changePage()" />
-        </div>
+
+        <el-pagination background layout="prev, pager, next" v-bind:current-page.sync="page" v-on:current-change="changePage" v-bind:total="count" v-bind:page-size="limit" v-if="getPages() > 1" ></el-pagination>
     </section>
 </template>
 
@@ -97,7 +96,7 @@
         padding: .5em;
         border: 1px solid #bbb;
     }
-    .pager {
+    .el-pagination {
         display: flex;
         justify-content: center;
     }
@@ -109,6 +108,7 @@
         margin-bottom: 20px;
         padding: 0;
         min-height: 300px;
+        align-content: baseline;
     }
     ul > li {
         margin: 0;
