@@ -6,11 +6,11 @@
                 <th>ビンゴ枠数</th>
                 <td>
                     <el-select name="row" v-model="row" placeholder="行" v-on:change="changeSize">
-                        <el-option v-for="n in 5" v-bind:key="n" v-bind:value="n" v-bind:label="n + '行'"></el-option>
+                        <el-option v-for="n in 10" v-bind:key="n" v-bind:value="n" v-bind:label="n + '行'"></el-option>
                     </el-select>
                     ×
                     <el-select name="column" v-model="column" placeholder="column" v-on:change="changeSize">
-                        <el-option v-for="n in 5" v-bind:key="n" v-bind:value="n" v-bind:label="n + '列'"></el-option>
+                        <el-option v-for="n in 10" v-bind:key="n" v-bind:value="n" v-bind:label="n + '列'"></el-option>
                     </el-select>
                 </td>
             </tr>
@@ -194,7 +194,7 @@
         list-style: none;
         display: flex;
         flex-wrap: wrap;
-        max-width: 500px;
+        max-width: 1000px;
         padding: 0;
     }
 </style>
