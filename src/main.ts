@@ -1,14 +1,6 @@
-import Vue from 'vue';
-import VueThinModal from 'vue-thin-modal'
-import ElementUI from 'element-ui'
-import App from './app.vue';
-import 'element-ui/lib/theme-chalk/index.css'
-import 'vue-thin-modal/dist/vue-thin-modal.css'
+import './assets/main.css'
 
-Vue.use(VueThinModal);
-Vue.use(ElementUI);
+import { createApp } from 'vue'
+import App from './App.vue'
 
-new Vue({
-    el: "#app",
-    render: h => h(App)
-});
+createApp(App).mount('#app')
