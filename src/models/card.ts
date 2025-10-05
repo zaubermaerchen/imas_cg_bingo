@@ -1,3 +1,5 @@
+export type CardSize = 's' | 'm' | 'm2' | 'l' | 'l_noframe' | 'xs' | 'ls'
+
 export default class Card {
   id: number
   name: string
@@ -13,7 +15,7 @@ export default class Card {
     this.hash = hash
   }
 
-  imageUrl = (size: 's' | 'm' | 'm2' | 'l' | 'l_noframe' | 'xs' | 'ls' = 'm'): string => {
+  imageUrl = (size: CardSize): string => {
     if (this.rarity < 4 && size === 'l_noframe') {
       size = 'l'
     }

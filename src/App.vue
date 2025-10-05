@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { VueFinalModal } from 'vue-final-modal'
 import { VueDraggable } from 'vue-draggable-plus'
 import ImageBox from '@/components/ImageBox.vue'
+import ResultModal from '@/components/ResultModal.vue'
 import Card from '@/models/card.ts'
 
+const row = ref(3)
+const column = ref(3)
 const cardList = ref<Array<Card | undefined>>([
   new Card(1000101, '島村卯月', 0, 0, '0dabb79ff64691111a0abae2ffed01ce'),
   new Card(1001101, '小日向美穂', 0, 0, 'bef9093335fbcbe9e92a41d2d68a206d'),
@@ -15,6 +19,8 @@ const cardList = ref<Array<Card | undefined>>([
   new Card(3000201, '高森藍子', 2, 0, '25ea7fdd66fc6bd8e7209a4c0d2ba00c'),
   new Card(3200801, '日野茜', 2, 2, '2ba9aa6bf49a8d75a1cf6ae3a131de74'),
 ])
+
+const showResultModal = ref(false)
 </script>
 
 <template>
@@ -24,7 +30,17 @@ const cardList = ref<Array<Card | undefined>>([
         <ImageBox v-bind:card="card" v-on:click="console.log(card?.name ?? 'unknown')" />
       </li>
     </VueDraggable>
+    <button v-on:click="showResultModal = true">画像生成</button>
   </main>
+
+  <VueFinalModal
+    class="modal"
+    v-model="showResultModal"
+    v-bind::click-to-close="true"
+    v-bind:esc-to-close="true"
+  >
+    <ResultModal v-bind:cardList="cardList" v-bind:row="row" v-bind:column="column" />
+  </VueFinalModal>
 </template>
 
 <style scoped>

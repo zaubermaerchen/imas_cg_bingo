@@ -33,3 +33,9 @@ a,
     padding: 0 2rem;
   }
 }
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
