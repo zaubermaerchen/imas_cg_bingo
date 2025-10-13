@@ -17,16 +17,12 @@ const canvas = ref<HTMLCanvasElement | null>(null)
 const imagePath = ref<string | null>(null)
 
 const drawCanvas = async (
-  canvas: HTMLCanvasElement | null,
+  canvas: HTMLCanvasElement,
   cardList: (Card | undefined)[],
   row: number,
   column: number,
   size: CardSize,
 ) => {
-  if (canvas === null) {
-    return
-  }
-
   const ctx = canvas.getContext('2d')
   if (ctx === null) {
     return
@@ -53,17 +49,23 @@ const drawCanvas = async (
     promises.push(drawImageToCanvas(ctx, x, y, path))
   }
   await Promise.all(promises)
-
-  if (imagePath.value !== null) {
-    URL.revokeObjectURL(imagePath.value)
-  }
-
-  imagePath.value = await canvasToImage(canvas)
 }
 
 watch(
   canvas,
-  async () => await drawCanvas(canvas.value, props.cardList, props.row, props.column, props.size),
+  async () => {
+    if (canvas.value === null) {
+      return
+    }
+
+    await drawCanvas(canvas.value, props.cardList, props.row, props.column, props.size)
+
+    if (imagePath.value !== null) {
+      URL.revokeObjectURL(imagePath.value)
+    }
+
+    imagePath.value = await canvasToImage(canvas.value)
+  },
   {
     once: true,
   },
