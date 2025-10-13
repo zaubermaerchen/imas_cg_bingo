@@ -2,20 +2,19 @@
 import { ref, watch } from 'vue'
 import Card, { type CardSize } from '@/models/card.ts'
 import { drawImageToCanvas, canvasToImage } from '@/utils/canvas.ts'
+import { getCardImageSize } from '@/utils/card'
 
 interface Props {
   cardList: (Card | undefined)[]
   row: number
   column: number
+  size: CardSize
 }
 
 const props = defineProps<Props>()
 
 const canvas = ref<HTMLCanvasElement | null>(null)
 const imagePath = ref<string | null>(null)
-
-const cardWidth = 640
-const cardHeight = 800
 
 const drawCanvas = async (
   canvas: HTMLCanvasElement | null,
@@ -33,8 +32,10 @@ const drawCanvas = async (
     return
   }
 
-  canvas.width = column * cardWidth
-  canvas.height = row * cardHeight
+  const cardSize = getCardImageSize(size)
+
+  canvas.width = column * cardSize.width
+  canvas.height = row * cardSize.height
 
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
   ctx.fillStyle = 'rgb(0, 0, 0)'
@@ -47,8 +48,8 @@ const drawCanvas = async (
       continue
     }
     const path = card.imageUrl(size)
-    const x = cardWidth * (index % column)
-    const y = cardHeight * Math.floor(index / column)
+    const x = cardSize.width * (index % column)
+    const y = cardSize.height * Math.floor(index / column)
     promises.push(drawImageToCanvas(ctx, x, y, path))
   }
   await Promise.all(promises)
@@ -58,7 +59,7 @@ const drawCanvas = async (
 
 watch(
   canvas,
-  async () => await drawCanvas(canvas.value, props.cardList, props.row, props.column, 'l'),
+  async () => await drawCanvas(canvas.value, props.cardList, props.row, props.column, props.size),
   {
     once: true,
   },

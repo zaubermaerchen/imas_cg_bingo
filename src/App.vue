@@ -4,10 +4,11 @@ import { VueFinalModal } from 'vue-final-modal'
 import { VueDraggable } from 'vue-draggable-plus'
 import ImageBox from '@/components/ImageBox.vue'
 import ResultModal from '@/components/ResultModal.vue'
-import Card from '@/models/card.ts'
+import Card, { type CardSize } from '@/models/card.ts'
 
 const row = ref(3)
 const column = ref(3)
+const cardSize = ref<CardSize>('m')
 const cardList = ref<Array<Card | undefined>>([
   new Card(1000101, '島村卯月', 0, 0, '0dabb79ff64691111a0abae2ffed01ce'),
   new Card(1001101, '小日向美穂', 0, 0, 'bef9093335fbcbe9e92a41d2d68a206d'),
@@ -21,11 +22,56 @@ const cardList = ref<Array<Card | undefined>>([
 ])
 
 const showResultModal = ref(false)
+
+const changeFrameSize = () => {
+  const count = row.value * column.value
+  if (cardList.value.length > count) {
+    cardList.value = cardList.value.slice(0, count)
+  } else if (cardList.value.length < count) {
+    cardList.value = cardList.value.concat(Array.from({ length: count - cardList.value.length }))
+  }
+}
 </script>
 
 <template>
   <main>
-    <VueDraggable v-model="cardList" tag="ul" class="bingo">
+    <table>
+      <tbody>
+        <tr>
+          <th>ビンゴ枠数</th>
+          <td>
+            <select v-model.number="row" v-on:change="changeFrameSize()">
+              <option v-for="n in 10" v-bind:key="n" v-bind:value="n">{{ n }}行</option>
+            </select>
+            x
+            <select v-model.number="column" v-on:change="changeFrameSize()">
+              <option v-for="n in 10" v-bind:key="n" v-bind:value="n">{{ n }}列</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>カードサイズ</th>
+          <td>
+            <select v-model="cardSize">
+              <option value="s">Sサイズ</option>
+              <option value="m">Mサイズ</option>
+              <option value="m2">M2サイズ</option>
+              <option value="l">Lサイズ</option>
+              <option value="l_noframe">Lサイズ(SR枠無し)</option>
+              <option value="xs">正方形</option>
+              <option value="ls">短冊</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <VueDraggable
+      v-model="cardList"
+      v-bind:style="{ width: column * 100 + 'px' }"
+      tag="ul"
+      class="bingo"
+    >
       <li v-for="(card, index) in cardList" v-bind:key="index">
         <ImageBox v-bind:card="card" v-on:click="console.log(card?.name ?? 'unknown')" />
       </li>
@@ -39,7 +85,12 @@ const showResultModal = ref(false)
     v-bind::click-to-close="true"
     v-bind:esc-to-close="true"
   >
-    <ResultModal v-bind:cardList="cardList" v-bind:row="row" v-bind:column="column" />
+    <ResultModal
+      v-bind:cardList="cardList"
+      v-bind:row="row"
+      v-bind:column="column"
+      v-bind:size="cardSize"
+    />
   </VueFinalModal>
 </template>
 
@@ -48,8 +99,6 @@ ul.bingo {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  width: 300px;
-  max-width: 1000px;
   padding: 0;
   font-size: 0;
 }
