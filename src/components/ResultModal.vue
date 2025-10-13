@@ -54,6 +54,10 @@ const drawCanvas = async (
   }
   await Promise.all(promises)
 
+  if (imagePath.value !== null) {
+    URL.revokeObjectURL(imagePath.value)
+  }
+
   imagePath.value = await canvasToImage(canvas)
 }
 

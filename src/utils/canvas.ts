@@ -18,7 +18,7 @@ export const drawImageToCanvas = (
 export const canvasToImage = (canvas: HTMLCanvasElement) => {
   return new Promise<string>((resolve: (value: string) => void, reject: () => void) => {
     canvas.toBlob((blob) => {
-      if (blob == null) {
+      if (blob === null) {
         reject()
         return
       }
