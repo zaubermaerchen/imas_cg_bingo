@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { VueFinalModal } from 'vue-final-modal'
 import { VueDraggable } from 'vue-draggable-plus'
 import ImageBox from '@/components/ImageBox.vue'
@@ -23,14 +23,14 @@ const cardList = ref<Array<Card | undefined>>([
 
 const showResultModal = ref(false)
 
-const changeFrameSize = () => {
+watch([row, column], () => {
   const count = row.value * column.value
   if (cardList.value.length > count) {
     cardList.value = cardList.value.slice(0, count)
   } else if (cardList.value.length < count) {
     cardList.value = cardList.value.concat(Array.from({ length: count - cardList.value.length }))
   }
-}
+})
 </script>
 
 <template>
@@ -40,11 +40,11 @@ const changeFrameSize = () => {
         <tr>
           <th>ビンゴ枠数</th>
           <td>
-            <select v-model.number="row" v-on:change="changeFrameSize()">
+            <select v-model.number="row">
               <option v-for="n in 10" v-bind:key="n" v-bind:value="n">{{ n }}行</option>
             </select>
             x
-            <select v-model.number="column" v-on:change="changeFrameSize()">
+            <select v-model.number="column">
               <option v-for="n in 10" v-bind:key="n" v-bind:value="n">{{ n }}列</option>
             </select>
           </td>
