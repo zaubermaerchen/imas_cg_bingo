@@ -4,7 +4,7 @@ export const drawImageToCanvas = (
   y: number,
   path: string,
 ) => {
-  return new Promise((resolve: (value?: unknown) => void) => {
+  return new Promise<void>((resolve: () => void) => {
     const image = new Image()
     image.src = path
     image.crossOrigin = 'anonymous'

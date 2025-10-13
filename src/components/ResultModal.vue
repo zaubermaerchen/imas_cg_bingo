@@ -37,18 +37,12 @@ const drawCanvas = async (
   ctx.fillStyle = 'rgb(0, 0, 0)'
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
-  const promises: Promise<unknown>[] = []
-  for (let index = 0; index < cardList.length; index++) {
-    const card = cardList[index] ?? undefined
-    if (card == undefined) {
-      continue
-    }
-    const path = card.imageUrl(size)
+  const promiseList = cardList.map((card, index) => {
     const x = cardSize.width * (index % column)
     const y = cardSize.height * Math.floor(index / column)
-    promises.push(drawImageToCanvas(ctx, x, y, path))
-  }
-  await Promise.all(promises)
+    return card ? drawImageToCanvas(ctx, x, y, card.imageUrl(size)) : Promise.resolve()
+  })
+  await Promise.all(promiseList)
 }
 
 watch(
