@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onBeforeUnmount } from 'vue'
 import Card, { type CardSize } from '@/models/card.ts'
 import { drawImageToCanvas, canvasToImage } from '@/utils/canvas.ts'
 import { getCardImageSize } from '@/utils/card'
@@ -60,16 +60,17 @@ watch(
 
     await drawCanvas(canvas.value, props.cardList, props.row, props.column, props.size)
 
-    if (imagePath.value !== null) {
-      URL.revokeObjectURL(imagePath.value)
-    }
-
     imagePath.value = await canvasToImage(canvas.value)
   },
   {
     once: true,
   },
 )
+onBeforeUnmount(() => {
+  if (imagePath.value !== null) {
+    URL.revokeObjectURL(imagePath.value)
+  }
+})
 </script>
 
 <template>
