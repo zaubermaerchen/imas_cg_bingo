@@ -1,4 +1,6 @@
-import { type CardSize } from '@/models/card.ts'
+import Card, { type CardSize } from '@/models/card.ts'
+import { drawImageToCanvas } from '@/utils/canvas.ts'
+
 export const getCardImageSize = (size: CardSize) => {
   switch (size) {
     case 's':
@@ -15,4 +17,33 @@ export const getCardImageSize = (size: CardSize) => {
     case 'xs':
       return { width: 100, height: 100 }
   }
+}
+
+export const drawCardListToCanvas = async (
+  canvas: HTMLCanvasElement,
+  cardList: (Card | undefined)[],
+  row: number,
+  column: number,
+  size: CardSize,
+) => {
+  const ctx = canvas.getContext('2d')
+  if (ctx === null) {
+    return
+  }
+
+  const cardSize = getCardImageSize(size)
+
+  canvas.width = column * cardSize.width
+  canvas.height = row * cardSize.height
+
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+  ctx.fillStyle = 'rgb(0, 0, 0)'
+  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+
+  const promiseList = cardList.map((card, index) => {
+    const x = cardSize.width * (index % column)
+    const y = cardSize.height * Math.floor(index / column)
+    return card ? drawImageToCanvas(ctx, x, y, card.imageUrl(size)) : Promise.resolve()
+  })
+  await Promise.all(promiseList)
 }
