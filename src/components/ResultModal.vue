@@ -34,7 +34,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="result">
     <canvas ref="canvas"></canvas>
-    <img v-if="imagePath" v-bind:src="imagePath" />
+    <img v-if="imagePath" v-bind:src="imagePath" alt="generated image" />
   </div>
 </template>
 
