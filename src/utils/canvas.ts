@@ -1,25 +1,17 @@
 export const loadImage = (path: string): Promise<HTMLImageElement> => {
-  return new Promise((resolve: (value: HTMLImageElement) => void, reject: () => void) => {
-    const image = new Image()
-    image.src = path
-    image.crossOrigin = 'anonymous'
-    image.onload = () => {
-      resolve(image)
-    }
-    image.onerror = () => {
-      reject()
-    }
-  })
-}
-
-export const drawImageToCanvas = async (
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  path: string,
-) => {
-  const image = await loadImage(path)
-  ctx.drawImage(image, x, y, image.width, image.height)
+  return new Promise(
+    (resolve: (value: HTMLImageElement) => void, reject: (reason: Error) => void) => {
+      const image = new Image()
+      image.src = path
+      image.crossOrigin = 'anonymous'
+      image.onload = () => {
+        resolve(image)
+      }
+      image.onerror = () => {
+        reject(new Error(`Failed to load image: ${path}`))
+      }
+    },
+  )
 }
 
 export const canvasToImage = (canvas: HTMLCanvasElement) => {

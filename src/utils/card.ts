@@ -1,5 +1,5 @@
 import Card, { type CardSize } from '@/models/card.ts'
-import { drawImageToCanvas } from '@/utils/canvas.ts'
+import { loadImage } from '@/utils/canvas.ts'
 
 export const getCardImageSize = (size: CardSize) => {
   switch (size) {
@@ -41,9 +41,15 @@ export const drawCardListToCanvas = async (
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
   const promiseList = cardList.map((card, index) => {
+    if (card === undefined) {
+      return Promise.resolve()
+    }
     const x = cardSize.width * (index % column)
     const y = cardSize.height * Math.floor(index / column)
-    return card ? drawImageToCanvas(ctx, x, y, card.imageUrl(size)) : Promise.resolve()
+
+    return loadImage(card.imageUrl(size)).then((image) =>
+      ctx.drawImage(image, x, y, image.width, image.height),
+    )
   })
   await Promise.all(promiseList)
 }
