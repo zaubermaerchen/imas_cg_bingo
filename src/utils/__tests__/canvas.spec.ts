@@ -32,5 +32,7 @@ describe('canvasToImage', () => {
 
     const imageUrl = await canvasToImage(canvas)
     expect(imageUrl.startsWith('blob:')).toBe(true)
+
+    URL.revokeObjectURL(imageUrl)
   })
 })

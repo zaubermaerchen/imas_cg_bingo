@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
+import { render } from 'vitest-browser-vue'
 
 import ImageBox from '@/components/ImageBox.vue'
 import Card from '@/models/card.ts'
-import { render } from 'vitest-browser-vue'
 
 import blankImageUrl from '@/assets/blank.jpg'
 
