@@ -28,14 +28,27 @@ describe('Card', () => {
 
   it('画像URLが正常に生成されるか', () => {
     const card1 = new Card(1000101, '島村卯月', 0, 0, '0dabb79ff64691111a0abae2ffed01ce')
-    expect(card1.imageUrl()).toBe('/image/card/m/0dabb79ff64691111a0abae2ffed01ce.jpg')
-    expect(card1.imageUrl('s')).toBe('/image/card/s/0dabb79ff64691111a0abae2ffed01ce.jpg')
-    expect(card1.imageUrl('m')).toBe('/image/card/m/0dabb79ff64691111a0abae2ffed01ce.jpg')
-    expect(card1.imageUrl('m2')).toBe('/image/card/m/0dabb79ff64691111a0abae2ffed01ce.jpg')
-    expect(card1.imageUrl('l')).toBe('/image/card/l/0dabb79ff64691111a0abae2ffed01ce.jpg')
-    expect(card1.imageUrl('l_noframe')).toBe('/image/card/l/0dabb79ff64691111a0abae2ffed01ce.jpg')
-    expect(card1.imageUrl('xs')).toBe('/image/card/xs/0dabb79ff64691111a0abae2ffed01ce.jpg')
-    expect(card1.imageUrl('ls')).toBe('/image/card/xl/0dabb79ff64691111a0abae2ffed01ce.jpg')
+    expect(card1.imageUrl('s')).toBe(
+      'https://example.com/card/s/0dabb79ff64691111a0abae2ffed01ce.jpg',
+    )
+    expect(card1.imageUrl('m')).toBe(
+      'https://example.com/card/m/0dabb79ff64691111a0abae2ffed01ce.jpg',
+    )
+    expect(card1.imageUrl('m2')).toBe(
+      'https://example.com/card/m2/0dabb79ff64691111a0abae2ffed01ce.jpg',
+    )
+    expect(card1.imageUrl('l')).toBe(
+      'https://example.com/card/l/0dabb79ff64691111a0abae2ffed01ce.jpg',
+    )
+    expect(card1.imageUrl('l_noframe')).toBe(
+      'https://example.com/card/l/0dabb79ff64691111a0abae2ffed01ce.jpg',
+    )
+    expect(card1.imageUrl('xs')).toBe(
+      'https://example.com/card/xs/0dabb79ff64691111a0abae2ffed01ce.jpg',
+    )
+    expect(card1.imageUrl('ls')).toBe(
+      'https://example.com/card/ls/0dabb79ff64691111a0abae2ffed01ce.jpg',
+    )
 
     const card2 = new Card(
       1401801,
@@ -44,9 +57,11 @@ describe('Card', () => {
       4,
       '00f4266728c5a057c338b3033a9aa17c',
     )
-    expect(card2.imageUrl()).toBe('/image/card/m/00f4266728c5a057c338b3033a9aa17c.jpg')
+    expect(card2.imageUrl('m')).toBe(
+      'https://example.com/card/m/00f4266728c5a057c338b3033a9aa17c.jpg',
+    )
     expect(card2.imageUrl('l_noframe')).toBe(
-      '/image/card/l_noframe/00f4266728c5a057c338b3033a9aa17c.jpg',
+      'https://example.com/card/l_noframe/00f4266728c5a057c338b3033a9aa17c.jpg',
     )
   })
 })
