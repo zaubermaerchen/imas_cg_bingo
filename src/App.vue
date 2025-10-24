@@ -1,27 +1,16 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { VueFinalModal } from 'vue-final-modal'
 import { VueDraggable } from 'vue-draggable-plus'
 import ImageBox from '@/components/ImageBox.vue'
+import SelectorModal from '@/components/SelectorModal.vue'
 import ResultModal from '@/components/ResultModal.vue'
 import Card, { type CardSize } from '@/models/card.ts'
 
 const row = ref(3)
 const column = ref(3)
 const cardSize = ref<CardSize>('m')
-const cardList = ref<Array<Card | undefined>>([
-  new Card(1000101, '島村卯月', 0, 0, '0dabb79ff64691111a0abae2ffed01ce'),
-  new Card(1001101, '小日向美穂', 0, 0, 'bef9093335fbcbe9e92a41d2d68a206d'),
-  new Card(1001301, '五十嵐響子', 0, 0, 'fb3b173c49703071b4dbdd5ed424640c'),
-  new Card(2000101, '渋谷凛', 1, 0, '8f88bb5ffa40b4935ef04257ba4ba0d1'),
-  new Card(2000801, '神谷奈緒', 1, 0, '4c54b931268517a3746f98911166b113'),
-  new Card(2200901, '北条加蓮', 1, 2, 'd3e95e1ca3c7b346535ad23e8619ec7e'),
-  new Card(3000101, '本田未央', 2, 0, '3a15a87af190354ae89fca368b35b69e'),
-  new Card(3000201, '高森藍子', 2, 0, '25ea7fdd66fc6bd8e7209a4c0d2ba00c'),
-  new Card(3200801, '日野茜', 2, 2, '2ba9aa6bf49a8d75a1cf6ae3a131de74'),
-])
-
-const showResultModal = ref(false)
+const cardList = ref<Array<Card | undefined>>(Array.from({ length: row.value * column.value }))
 
 watch([row, column], () => {
   const count = row.value * column.value
@@ -31,6 +20,37 @@ watch([row, column], () => {
     cardList.value = cardList.value.concat(Array.from({ length: count - cardList.value.length }))
   }
 })
+
+const visibleSelectorModal = ref(false)
+const targetCardIndex = ref<number | null>(null)
+const targetCard = computed<Card | undefined>({
+  get() {
+    const index = targetCardIndex.value
+    if (index === null) {
+      return undefined
+    }
+    return cardList.value[index] ?? undefined
+  },
+  set(card: Card | undefined) {
+    const index = targetCardIndex.value
+    if (index === null) {
+      return
+    }
+    cardList.value[index] = card
+  },
+})
+const showSelectorModal = (cardIndex: number) => {
+  targetCardIndex.value = cardIndex
+  visibleSelectorModal.value = true
+}
+const hideSelectorModal = () => {
+  visibleSelectorModal.value = false
+}
+
+const visibleResultModal = ref(false)
+const showResultModal = () => {
+  visibleResultModal.value = true
+}
 </script>
 
 <template>
@@ -73,15 +93,24 @@ watch([row, column], () => {
       class="bingo"
     >
       <li v-for="(card, index) in cardList" v-bind:key="index">
-        <ImageBox v-bind:card="card" v-on:click="console.log(card?.name ?? 'unknown')" />
+        <ImageBox v-bind:card="card" v-on:click="showSelectorModal(index)" />
       </li>
     </VueDraggable>
-    <button v-on:click="showResultModal = true">画像生成</button>
+    <button v-on:click="showResultModal">画像生成</button>
   </main>
 
   <VueFinalModal
     class="modal"
-    v-model="showResultModal"
+    v-model="visibleSelectorModal"
+    v-bind::click-to-close="true"
+    v-bind:esc-to-close="true"
+  >
+    <SelectorModal v-model="targetCard" v-on:confirm="hideSelectorModal" />
+  </VueFinalModal>
+
+  <VueFinalModal
+    class="modal"
+    v-model="visibleResultModal"
     v-bind::click-to-close="true"
     v-bind:esc-to-close="true"
   >
