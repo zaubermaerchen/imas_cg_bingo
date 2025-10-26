@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { VueFinalModal } from 'vue-final-modal'
 import ImageBox from '@/components/ImageBox.vue'
 import SelectorModal from '@/components/SelectorModal.vue'
 import Card from '@/models/card.ts'
+import { useTargetCard } from '@/composables/targetCard'
 
 interface Props {
   width: number
@@ -15,22 +16,7 @@ const props = defineProps<Props>()
 
 const visibleSelectorModal = ref(false)
 const targetCardIndex = ref<number | null>(null)
-const targetCard = computed<Card | undefined>({
-  get() {
-    const index = targetCardIndex.value
-    if (index === null) {
-      return undefined
-    }
-    return cardList.value[index] ?? undefined
-  },
-  set(card: Card | undefined) {
-    const index = targetCardIndex.value
-    if (index === null) {
-      return
-    }
-    cardList.value[index] = card
-  },
-})
+const targetCard = useTargetCard(cardList, targetCardIndex)
 const showSelectorModal = (cardIndex: number) => {
   targetCardIndex.value = cardIndex
   visibleSelectorModal.value = true
