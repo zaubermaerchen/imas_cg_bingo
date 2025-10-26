@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { inject, ref, watch } from 'vue'
-import { Container } from 'inversify'
-
 import ImageBox from '@/components/ImageBox.vue'
-import type CardRepositoryInterface from '@/repositories/cardRepositoryInterface.ts'
 import Card from '@/models/card.ts'
+import { useFilteredCardList } from '@/composables/filteredCardList'
 
 interface Emits {
   (e: 'confirm'): void
@@ -12,20 +9,8 @@ interface Emits {
 
 const target = defineModel<Card | undefined>({ required: true })
 const emits = defineEmits<Emits>()
-const cardRepository =
-  inject<Container>('diContainer')!.get<CardRepositoryInterface>('CardRepository')!
 
-const type = ref<number>(target.value?.type ?? -1)
-const rarity = ref<number>(target.value?.rarity ?? -1)
-const name = ref<string>(target.value?.name ?? '')
-const cardList = ref<Array<Card | undefined>>([])
-cardRepository.search(type.value, rarity.value, name.value).then((defaultCardList) => {
-  cardList.value = defaultCardList
-})
-watch([type, rarity, name], async () => {
-  cardList.value = await cardRepository.search(type.value, rarity.value, name.value)
-})
-
+const { type, rarity, name, cardList } = useFilteredCardList(target.value)
 const selectCard = (card: Card | undefined) => {
   target.value = card
   emits('confirm')
