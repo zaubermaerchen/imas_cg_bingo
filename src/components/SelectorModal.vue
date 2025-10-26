@@ -10,7 +10,7 @@ interface Emits {
   (e: 'confirm'): void
 }
 
-const target = defineModel<Card | undefined>()
+const target = defineModel<Card | undefined>({ required: true })
 const emits = defineEmits<Emits>()
 const cardRepository =
   inject<Container>('diContainer')!.get<CardRepositoryInterface>('CardRepository')!

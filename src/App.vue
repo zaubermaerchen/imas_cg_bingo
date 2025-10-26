@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { VueFinalModal } from 'vue-final-modal'
-import { VueDraggable } from 'vue-draggable-plus'
-import ImageBox from '@/components/ImageBox.vue'
-import SelectorModal from '@/components/SelectorModal.vue'
+import BingoArea from '@/components/BingoArea.vue'
 import ResultModal from '@/components/ResultModal.vue'
 import Card, { type CardSize } from '@/models/card.ts'
 
@@ -20,32 +18,6 @@ watch([row, column], () => {
     cardList.value = cardList.value.concat(Array.from({ length: count - cardList.value.length }))
   }
 })
-
-const visibleSelectorModal = ref(false)
-const targetCardIndex = ref<number | null>(null)
-const targetCard = computed<Card | undefined>({
-  get() {
-    const index = targetCardIndex.value
-    if (index === null) {
-      return undefined
-    }
-    return cardList.value[index] ?? undefined
-  },
-  set(card: Card | undefined) {
-    const index = targetCardIndex.value
-    if (index === null) {
-      return
-    }
-    cardList.value[index] = card
-  },
-})
-const showSelectorModal = (cardIndex: number) => {
-  targetCardIndex.value = cardIndex
-  visibleSelectorModal.value = true
-}
-const hideSelectorModal = () => {
-  visibleSelectorModal.value = false
-}
 
 const visibleResultModal = ref(false)
 const showResultModal = () => {
@@ -86,27 +58,9 @@ const showResultModal = () => {
       </tbody>
     </table>
 
-    <VueDraggable
-      v-model="cardList"
-      v-bind:style="{ width: column * 100 + 'px' }"
-      tag="ul"
-      class="bingo"
-    >
-      <li v-for="(card, index) in cardList" v-bind:key="index">
-        <ImageBox v-bind:card="card" v-on:click="showSelectorModal(index)" />
-      </li>
-    </VueDraggable>
+    <BingoArea v-bind:width="column * 100" v-model="cardList" />
     <button v-on:click="showResultModal">画像生成</button>
   </main>
-
-  <VueFinalModal
-    class="modal"
-    v-model="visibleSelectorModal"
-    v-bind::click-to-close="true"
-    v-bind:esc-to-close="true"
-  >
-    <SelectorModal v-model="targetCard" v-on:confirm="hideSelectorModal" />
-  </VueFinalModal>
 
   <VueFinalModal
     class="modal"
@@ -122,13 +76,3 @@ const showResultModal = () => {
     />
   </VueFinalModal>
 </template>
-
-<style scoped>
-ul.bingo {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0;
-  font-size: 0;
-}
-</style>
