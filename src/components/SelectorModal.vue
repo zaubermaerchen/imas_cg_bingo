@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { inject } from 'vue'
 import ImageBox from '@/components/ImageBox.vue'
 import Card from '@/models/card.ts'
 import { useFilteredCardList } from '@/composables/filteredCardList'
+import { CardDataSourceInjectKey } from '@/plugins/dataSourcePlugin.ts'
 
 interface Emits {
   (e: 'confirm'): void
@@ -10,7 +12,8 @@ interface Emits {
 const target = defineModel<Card | undefined>({ required: true })
 const emits = defineEmits<Emits>()
 
-const { type, rarity, name, cardList } = useFilteredCardList(target.value)
+const cardDataSouce = inject(CardDataSourceInjectKey)!
+const { type, rarity, name, cardList } = useFilteredCardList(cardDataSouce, target.value)
 const selectCard = (card: Card | undefined) => {
   target.value = card
   emits('confirm')
