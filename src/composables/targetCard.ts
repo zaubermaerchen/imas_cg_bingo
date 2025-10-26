@@ -1,10 +1,8 @@
-import { computed, type Ref } from 'vue'
+import { ref, computed, type Ref } from 'vue'
 import Card from '@/models/card.ts'
 
-export function useTargetCard(
-  cardList: Ref<Array<Card | undefined>>,
-  targetCardIndex: Ref<number | null>,
-) {
+export function useTargetCard(cardList: Ref<Array<Card | undefined>>) {
+  const targetCardIndex = ref<number | null>(null)
   const targetCard = computed<Card | undefined>({
     get() {
       const index = targetCardIndex.value
@@ -22,5 +20,5 @@ export function useTargetCard(
     },
   })
 
-  return targetCard
+  return { targetCardIndex, targetCard }
 }

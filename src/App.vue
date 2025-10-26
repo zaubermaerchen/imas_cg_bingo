@@ -58,7 +58,7 @@ const showResultModal = () => {
       </tbody>
     </table>
 
-    <BingoArea v-bind:width="column * 100" v-model="cardList" />
+    <BingoArea v-bind:row="row" v-bind:column="column" v-model="cardList" />
     <button v-on:click="showResultModal">画像生成</button>
   </main>
 
