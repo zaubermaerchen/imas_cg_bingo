@@ -1,6 +1,6 @@
 import Card from '@/models/card.ts'
 
-export default interface CardRepositoryInterface {
+export default interface CardDataSource {
   /**
    *
    * @param type   属性(-1の場合、全属性対象)

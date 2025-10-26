@@ -1,11 +1,9 @@
 import { inject, ref, watch } from 'vue'
-import { Container } from 'inversify'
 import Card from '@/models/card.ts'
-import type CardRepositoryInterface from '@/repositories/cardRepositoryInterface.ts'
+import { CardDataSourceInjectKey } from '@/plugins/dataSourcePlugin.ts'
 
 export function useFilteredCardList(currentCard: Card | undefined) {
-  const cardRepository =
-    inject<Container>('diContainer')!.get<CardRepositoryInterface>('CardRepository')!
+  const cardRepository = inject(CardDataSourceInjectKey)!
 
   const type = ref<number>(currentCard?.type ?? -1)
   const rarity = ref<number>(currentCard?.rarity ?? -1)
