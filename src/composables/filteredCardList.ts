@@ -6,10 +6,18 @@ export function useFilteredCardList(cardDataSouce: CardDataSource, currentCard: 
   const typeList = ref<number[]>(currentCard ? [currentCard.type] : [])
   const rarityList = ref<number[]>(currentCard ? [currentCard.rarity] : [])
   const name = ref<string | undefined>(currentCard?.name)
+  const limit = ref(10)
+  const offset = ref(0)
   const cardList = ref<Array<Card | undefined>>([])
 
   const fetchCardList = async () => {
-    cardList.value = await cardDataSouce.search(typeList.value, rarityList.value, name.value)
+    cardList.value = await cardDataSouce.search(
+      typeList.value,
+      rarityList.value,
+      name.value,
+      limit.value,
+      offset.value,
+    )
   }
 
   void fetchCardList()

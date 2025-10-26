@@ -4,7 +4,13 @@ import Card from '@/models/card.ts'
 export default class CardRepository implements DataSouce {
   constructor() {}
 
-  search(typeList: number[], rarityList: number[], name: string | undefined) {
+  search(
+    typeList: number[],
+    rarityList: number[],
+    name: string | undefined,
+    limit: number,
+    offset: number,
+  ): Promise<Card[]> {
     let cardList = [
       new Card(1000101, '島村卯月', 0, 0, '0dabb79ff64691111a0abae2ffed01ce'),
       new Card(1001101, '小日向美穂', 0, 0, 'bef9093335fbcbe9e92a41d2d68a206d'),
@@ -28,6 +34,8 @@ export default class CardRepository implements DataSouce {
     if (name !== undefined) {
       cardList = cardList.filter((card) => card.name.includes(name))
     }
+
+    cardList = cardList.slice(offset, offset + limit)
 
     return Promise.resolve(cardList)
   }
