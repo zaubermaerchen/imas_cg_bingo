@@ -15,9 +15,9 @@ const emits = defineEmits<Emits>()
 const cardRepository =
   inject<Container>('diContainer')!.get<CardRepositoryInterface>('CardRepository')!
 
-const type = ref<number>(-1)
-const rarity = ref<number>(-1)
-const name = ref<string>('')
+const type = ref<number>(target.value?.type ?? -1)
+const rarity = ref<number>(target.value?.rarity ?? -1)
+const name = ref<string>(target.value?.name ?? '')
 const cardList = ref<Array<Card | undefined>>([])
 cardRepository.search(type.value, rarity.value, name.value).then((defaultCardList) => {
   cardList.value = defaultCardList
