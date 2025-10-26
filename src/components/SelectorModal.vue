@@ -69,10 +69,13 @@ const selectCard = (card: Card | undefined) => {
 
 <style>
 section.selector-modal {
-  width: auto;
-  max-width: 500px;
+  padding: 2em;
+  color: black;
+  background-color: white;
 }
 section.selector-modal > ul {
+  width: 500px;
+  max-width: 500px;
   display: flex;
   flex-wrap: wrap;
   font-size: 0;
