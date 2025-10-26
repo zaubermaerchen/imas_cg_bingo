@@ -3,18 +3,17 @@ import Card from '@/models/card.ts'
 import type CardDataSource from '@/repositories/cardDataSource.ts'
 
 export function useFilteredCardList(cardDataSouce: CardDataSource, currentCard: Card | undefined) {
-  const type = ref<number>(currentCard?.type ?? -1)
-  const rarity = ref<number>(currentCard?.rarity ?? -1)
-  const name = ref<string>(currentCard?.name ?? '')
+  const typeList = ref<number[]>(currentCard ? [currentCard.type] : [])
+  const rarityList = ref<number[]>(currentCard ? [currentCard.rarity] : [])
+  const name = ref<string | undefined>(currentCard?.name)
   const cardList = ref<Array<Card | undefined>>([])
 
-  cardDataSouce.search(type.value, rarity.value, name.value).then((defaultCardList) => {
-    cardList.value = defaultCardList
-  })
+  const fetchCardList = async () => {
+    cardList.value = await cardDataSouce.search(typeList.value, rarityList.value, name.value)
+  }
 
-  watch([type, rarity, name], async () => {
-    cardList.value = await cardDataSouce.search(type.value, rarity.value, name.value)
-  })
+  void fetchCardList()
+  watch([typeList, rarityList, name], fetchCardList)
 
-  return { type, rarity, name, cardList }
+  return { typeList, rarityList, name, cardList }
 }

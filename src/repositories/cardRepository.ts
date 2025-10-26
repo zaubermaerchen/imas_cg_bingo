@@ -4,7 +4,7 @@ import Card from '@/models/card.ts'
 export default class CardRepository implements DataSouce {
   constructor() {}
 
-  search(type: number, rarity: number, name: string) {
+  search(typeList: number[], rarityList: number[], name: string | undefined) {
     let cardList = [
       new Card(1000101, '島村卯月', 0, 0, '0dabb79ff64691111a0abae2ffed01ce'),
       new Card(1001101, '小日向美穂', 0, 0, 'bef9093335fbcbe9e92a41d2d68a206d'),
@@ -17,15 +17,15 @@ export default class CardRepository implements DataSouce {
       new Card(3200801, '日野茜', 2, 2, '2ba9aa6bf49a8d75a1cf6ae3a131de74'),
     ]
 
-    if (type !== -1) {
-      cardList = cardList.filter((card) => card.type === type)
+    if (typeList.length > 0) {
+      cardList = cardList.filter((card) => typeList.includes(card.type))
     }
 
-    if (rarity !== -1) {
-      cardList = cardList.filter((card) => card.rarity === rarity)
+    if (rarityList.length > 0) {
+      cardList = cardList.filter((card) => rarityList.includes(card.rarity))
     }
 
-    if (name) {
+    if (name !== undefined) {
       cardList = cardList.filter((card) => card.name.includes(name))
     }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject } from 'vue'
+import { computed, inject } from 'vue'
 import ImageBox from '@/components/ImageBox.vue'
 import Card from '@/models/card.ts'
 import { useFilteredCardList } from '@/composables/filteredCardList'
@@ -13,7 +13,28 @@ const target = defineModel<Card | undefined>({ required: true })
 const emits = defineEmits<Emits>()
 
 const cardDataSouce = inject(CardDataSourceInjectKey)!
-const { type, rarity, name, cardList } = useFilteredCardList(cardDataSouce, target.value)
+const { typeList, rarityList, name, cardList } = useFilteredCardList(cardDataSouce, target.value)
+const displayedTypeList = computed({
+  get: () => typeList.value.map((v) => String(v)),
+  set: (value: string[]) => {
+    typeList.value = value.map((v) => Number(v))
+  },
+})
+
+const displayedRarityList = computed({
+  get: () => rarityList.value.map((v) => String(v)),
+  set: (value: string[]) => {
+    rarityList.value = value.map((v) => Number(v))
+  },
+})
+
+const displayedName = computed({
+  get: () => name.value ?? '',
+  set: (value: string) => {
+    name.value = value !== '' ? value : undefined
+  },
+})
+
 const selectCard = (card: Card | undefined) => {
   target.value = card
   emits('confirm')
@@ -27,33 +48,53 @@ const selectCard = (card: Card | undefined) => {
         <tr>
           <th>属性</th>
           <td>
-            <!-- TODO チェックボックス -->
-            <select v-model.number="type">
-              <option value="-1">すべて</option>
-              <option value="0">キュート</option>
-              <option value="1">クール</option>
-              <option value="2">パッション</option>
-            </select>
+            <label>
+              <input type="checkbox" v-model="displayedTypeList" value="0" />
+              キュート
+            </label>
+            <label>
+              <input type="checkbox" v-model="displayedTypeList" value="1" />
+              クール
+            </label>
+            <label>
+              <input type="checkbox" v-model="displayedTypeList" value="2" />
+              パッション
+            </label>
           </td>
         </tr>
         <tr>
           <th>レアリティ</th>
           <td>
-            <select v-model.number="rarity">
-              <option value="-1">すべて</option>
-              <option value="0">N</option>
-              <option value="1">N+</option>
-              <option value="2">R</option>
-              <option value="3">R+</option>
-              <option value="4">SR</option>
-              <option value="5">SR+</option>
-            </select>
+            <label>
+              <input type="checkbox" v-model="displayedRarityList" value="0" />
+              N
+            </label>
+            <label>
+              <input type="checkbox" v-model="displayedRarityList" value="1" />
+              N+
+            </label>
+            <label>
+              <input type="checkbox" v-model="displayedRarityList" value="2" />
+              R
+            </label>
+            <label>
+              <input type="checkbox" v-model="displayedRarityList" value="3" />
+              R+
+            </label>
+            <label>
+              <input type="checkbox" v-model="displayedRarityList" value="4" />
+              SR
+            </label>
+            <label>
+              <input type="checkbox" v-model="displayedRarityList" value="5" />
+              SR+
+            </label>
           </td>
         </tr>
         <tr>
           <th>カード名</th>
           <td>
-            <input type="text" v-model="name" />
+            <input type="text" v-model="displayedName" />
           </td>
         </tr>
       </tbody>
