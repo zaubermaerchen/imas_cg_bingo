@@ -27,39 +27,35 @@ const showResultModal = () => {
 
 <template>
   <main>
-    <table>
-      <tbody>
-        <tr>
-          <th>ビンゴ枠数</th>
-          <td>
-            <select v-model.number="row">
-              <option v-for="n in 10" v-bind:key="n" v-bind:value="n">{{ n }}行</option>
-            </select>
-            x
-            <select v-model.number="column">
-              <option v-for="n in 10" v-bind:key="n" v-bind:value="n">{{ n }}列</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <th>カードサイズ</th>
-          <td>
-            <select v-model="cardSize">
-              <option value="s">Sサイズ</option>
-              <option value="m">Mサイズ</option>
-              <option value="m2">M2サイズ</option>
-              <option value="l">Lサイズ</option>
-              <option value="l_noframe">Lサイズ(SR枠無し)</option>
-              <option value="xs">正方形</option>
-              <option value="ls">短冊</option>
-            </select>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <el-form label-position="right" label-width="100px" style="width: 300px">
+      <el-form-item label="ビンゴ枠数">
+        <el-col v-bind:span="11">
+          <el-select v-model.number="row" name="row">
+            <el-option v-for="n in 10" v-bind:key="n" v-bind:value="n" v-bind:label="`${n}行`" />
+          </el-select>
+        </el-col>
+        <el-col v-bind:span="2" style="text-align: center"> x </el-col>
+        <el-col v-bind:span="11">
+          <el-select v-model.number="column" name="column">
+            <el-option v-for="n in 10" v-bind:key="n" v-bind:value="n" v-bind:label="`${n}列`" />
+          </el-select>
+        </el-col>
+      </el-form-item>
+      <el-form-item label="カードサイズ">
+        <el-select v-model="cardSize" name="card_size">
+          <el-option value="s" label="Sサイズ" />
+          <el-option value="m" label="Mサイズ" />
+          <el-option value="m2" label="M2サイズ" />
+          <el-option value="l" label="Lサイズ" />
+          <el-option value="l_noframe" label="Lサイズ(SR枠無し)" />
+          <el-option value="xs" label="正方形" />
+          <el-option value="ls" label="短冊" />
+        </el-select>
+      </el-form-item>
+    </el-form>
 
     <BingoArea v-bind:row="row" v-bind:column="column" v-model="cardList" />
-    <button v-on:click="showResultModal">画像生成</button>
+    <el-button type="primary" v-on:click="showResultModal">画像生成</el-button>
   </main>
 
   <VueFinalModal

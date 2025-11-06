@@ -43,62 +43,28 @@ const selectCard = (card: Card | undefined) => {
 
 <template>
   <section class="selector-modal">
-    <table>
-      <tbody>
-        <tr>
-          <th>属性</th>
-          <td>
-            <label>
-              <input type="checkbox" v-model="displayedTypeList" value="0" />
-              キュート
-            </label>
-            <label>
-              <input type="checkbox" v-model="displayedTypeList" value="1" />
-              クール
-            </label>
-            <label>
-              <input type="checkbox" v-model="displayedTypeList" value="2" />
-              パッション
-            </label>
-          </td>
-        </tr>
-        <tr>
-          <th>レアリティ</th>
-          <td>
-            <label>
-              <input type="checkbox" v-model="displayedRarityList" value="0" />
-              N
-            </label>
-            <label>
-              <input type="checkbox" v-model="displayedRarityList" value="1" />
-              N+
-            </label>
-            <label>
-              <input type="checkbox" v-model="displayedRarityList" value="2" />
-              R
-            </label>
-            <label>
-              <input type="checkbox" v-model="displayedRarityList" value="3" />
-              R+
-            </label>
-            <label>
-              <input type="checkbox" v-model="displayedRarityList" value="4" />
-              SR
-            </label>
-            <label>
-              <input type="checkbox" v-model="displayedRarityList" value="5" />
-              SR+
-            </label>
-          </td>
-        </tr>
-        <tr>
-          <th>カード名</th>
-          <td>
-            <input type="text" v-model="displayedName" />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <el-form label-position="right" label-width="100px">
+      <el-form-item label="カード名">
+        <el-input v-model="displayedName" name="name" placeholder="カード名" />
+      </el-form-item>
+      <el-form-item label="タイプ">
+        <el-checkbox-group v-model="displayedTypeList">
+          <el-checkbox label="0">キュート</el-checkbox>
+          <el-checkbox label="1">クール</el-checkbox>
+          <el-checkbox label="2">パッション</el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+      <el-form-item label="レアリティ">
+        <el-checkbox-group v-model="displayedRarityList">
+          <el-checkbox label="0">N</el-checkbox>
+          <el-checkbox label="1">N+</el-checkbox>
+          <el-checkbox label="2">R</el-checkbox>
+          <el-checkbox label="3">R+</el-checkbox>
+          <el-checkbox label="4">SR</el-checkbox>
+          <el-checkbox label="5">SR+</el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+    </el-form>
 
     <ul>
       <li v-for="(card, index) in cardList" v-bind:key="index">
