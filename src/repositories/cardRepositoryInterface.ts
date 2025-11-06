@@ -1,6 +1,6 @@
 import Card from '@/models/card.ts'
 
-export default interface CardDataSource {
+export default interface CardRepositoryInterface {
   /**
    *
    * @param {number[]} typeList       属性

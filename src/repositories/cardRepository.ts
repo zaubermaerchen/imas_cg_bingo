@@ -1,7 +1,7 @@
-import type DataSouce from '@/repositories/cardDataSource'
+import type RepositoryInterface from '@/repositories/cardRepositoryInterface.ts'
 import Card from '@/models/card.ts'
 
-export default class CardRepository implements DataSouce {
+export default class CardRepository implements RepositoryInterface {
   constructor() {}
 
   search(

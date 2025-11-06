@@ -6,10 +6,10 @@ import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
 import { createVfm } from 'vue-final-modal'
 import App from './App.vue'
-import { dataSourcePlugin } from '@/plugins/dataSourcePlugin.ts'
+import { dependencyProviderPlugin } from '@/plugins/dependencyProviderPlugin.ts'
 
 const app = createApp(App)
 app.use(ElementPlus)
 app.use(createVfm())
-app.use(dataSourcePlugin)
+app.use(dependencyProviderPlugin)
 app.mount('#app')

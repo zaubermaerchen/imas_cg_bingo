@@ -3,7 +3,7 @@ import { computed, inject } from 'vue'
 import ImageBox from '@/components/ImageBox.vue'
 import Card from '@/models/card.ts'
 import { useFilteredCardList } from '@/composables/filteredCardList'
-import { CardDataSourceInjectKey } from '@/plugins/dataSourcePlugin.ts'
+import { CardRepositoryInjectKey } from '@/plugins/dependencyProviderPlugin.ts'
 
 interface Emits {
   (e: 'confirm'): void
@@ -12,8 +12,8 @@ interface Emits {
 const target = defineModel<Card | undefined>({ required: true })
 const emits = defineEmits<Emits>()
 
-const cardDataSouce = inject(CardDataSourceInjectKey)!
-const { typeList, rarityList, name, cardList } = useFilteredCardList(cardDataSouce, target.value)
+const cardRepository = inject(CardRepositoryInjectKey)!
+const { typeList, rarityList, name, cardList } = useFilteredCardList(cardRepository, target.value)
 const displayedTypeList = computed({
   get: () => typeList.value.map((v) => String(v)),
   set: (value: string[]) => {
