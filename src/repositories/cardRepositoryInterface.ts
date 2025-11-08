@@ -9,7 +9,7 @@ export default interface CardRepositoryInterface {
    * @param {number} limit            取得上限
    * @param {number} offset           取得開始位置
    *
-   * @returns {Promise<Card[]>}
+   * @returns {Promise<[Card[], number]>} カードリストと総件数
    */
   search(
     typeList: number[],
@@ -17,5 +17,5 @@ export default interface CardRepositoryInterface {
     name: string | undefined,
     limit: number,
     offset: number,
-  ): Promise<Card[]>
+  ): Promise<[Card[], number]>
 }

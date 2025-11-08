@@ -5,26 +5,33 @@ import type CardRepositoryInterface from '@/repositories/cardRepositoryInterface
 export function useFilteredCardList(
   cardRepository: CardRepositoryInterface,
   currentCard: Card | undefined,
+  limit: number,
 ) {
   const typeList = ref<number[]>(currentCard ? [currentCard.type] : [])
   const rarityList = ref<number[]>(currentCard ? [currentCard.rarity] : [])
   const name = ref<string | undefined>(currentCard?.name)
-  const limit = ref(10)
-  const offset = ref(0)
   const cardList = ref<Array<Card | undefined>>([])
+  const total = ref(0)
+  const page = ref(1)
 
   const fetchCardList = async () => {
-    cardList.value = await cardRepository.search(
+    const result = await cardRepository.search(
       typeList.value,
       rarityList.value,
       name.value,
-      limit.value,
-      offset.value,
+      limit,
+      (page.value - 1) * limit,
     )
+    cardList.value = result[0]
+    total.value = result[1]
   }
 
   void fetchCardList()
-  watch([typeList, rarityList, name], fetchCardList)
+  watch([typeList, rarityList, name], async () => {
+    page.value = 1
+    await fetchCardList()
+  })
+  watch([page], fetchCardList)
 
-  return { typeList, rarityList, name, cardList }
+  return { typeList, rarityList, name, cardList, total, page }
 }

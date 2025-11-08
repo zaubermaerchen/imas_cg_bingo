@@ -12,8 +12,14 @@ interface Emits {
 const target = defineModel<Card | undefined>({ required: true })
 const emits = defineEmits<Emits>()
 
+const limitPerPage = 10
+
 const cardRepository = inject(CardRepositoryInjectKey)!
-const { typeList, rarityList, name, cardList } = useFilteredCardList(cardRepository, target.value)
+const { typeList, rarityList, name, cardList, total, page } = useFilteredCardList(
+  cardRepository,
+  target.value,
+  limitPerPage,
+)
 const displayedTypeList = computed({
   get: () => typeList.value.map((v) => String(v)),
   set: (value: string[]) => {
@@ -71,6 +77,14 @@ const selectCard = (card: Card | undefined) => {
         <ImageBox v-bind:card="card" v-on:click="selectCard(card)" />
       </li>
     </ul>
+
+    <el-pagination
+      v-model:currentPage="page"
+      background
+      layout="prev, pager, next"
+      v-bind:total="total"
+      v-bind:page-size="limitPerPage"
+    />
   </section>
 </template>
 
@@ -96,5 +110,10 @@ section.selector-modal > ul {
 section.selector-modal > ul > li {
   margin: 0;
   padding: 0;
+}
+
+.el-pagination {
+  display: flex !important;
+  justify-content: center;
 }
 </style>
