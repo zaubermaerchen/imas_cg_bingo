@@ -55,19 +55,19 @@ const selectCard = (card: Card | undefined) => {
       </el-form-item>
       <el-form-item label="タイプ">
         <el-checkbox-group v-model="displayedTypeList">
-          <el-checkbox label="0">キュート</el-checkbox>
-          <el-checkbox label="1">クール</el-checkbox>
-          <el-checkbox label="2">パッション</el-checkbox>
+          <el-checkbox value="0">キュート</el-checkbox>
+          <el-checkbox value="1">クール</el-checkbox>
+          <el-checkbox value="2">パッション</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item label="レアリティ">
         <el-checkbox-group v-model="displayedRarityList">
-          <el-checkbox label="0">N</el-checkbox>
-          <el-checkbox label="1">N+</el-checkbox>
-          <el-checkbox label="2">R</el-checkbox>
-          <el-checkbox label="3">R+</el-checkbox>
-          <el-checkbox label="4">SR</el-checkbox>
-          <el-checkbox label="5">SR+</el-checkbox>
+          <el-checkbox value="0">N</el-checkbox>
+          <el-checkbox value="1">N+</el-checkbox>
+          <el-checkbox value="2">R</el-checkbox>
+          <el-checkbox value="3">R+</el-checkbox>
+          <el-checkbox value="4">SR</el-checkbox>
+          <el-checkbox value="5">SR+</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
     </el-form>
