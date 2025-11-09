@@ -15,11 +15,18 @@ const emits = defineEmits<Emits>()
 const limitPerPage = 10
 
 const cardRepository = inject(CardRepositoryInjectKey)!
-const { typeList, rarityList, name, cardList, total, page } = useFilteredCardList(
+const { typeList, rarityList, name, cardList, total, offset } = useFilteredCardList(
   cardRepository,
   target.value,
   limitPerPage,
 )
+const page = computed({
+  get: () => offset.value / limitPerPage + 1,
+  set: (value: number) => {
+    offset.value = (value - 1) * limitPerPage
+  },
+})
+
 const displayedTypeList = computed({
   get: () => typeList.value.map((v) => String(v)),
   set: (value: string[]) => {

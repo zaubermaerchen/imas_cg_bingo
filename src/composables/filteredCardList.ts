@@ -12,7 +12,7 @@ export function useFilteredCardList(
   const name = ref<string | undefined>(currentCard?.name)
   const cardList = ref<Array<Card | undefined>>([])
   const total = ref(0)
-  const page = ref(1)
+  const offset = ref(0)
 
   const fetchCardList = async () => {
     const result = await cardRepository.search(
@@ -20,7 +20,7 @@ export function useFilteredCardList(
       rarityList.value,
       name.value,
       limit,
-      (page.value - 1) * limit,
+      offset.value,
     )
     cardList.value = result[0]
     total.value = result[1]
@@ -28,10 +28,10 @@ export function useFilteredCardList(
 
   void fetchCardList()
   watch([typeList, rarityList, name], async () => {
-    page.value = 1
+    offset.value = 0
     await fetchCardList()
   })
-  watch([page], fetchCardList)
+  watch([offset], fetchCardList)
 
-  return { typeList, rarityList, name, cardList, total, page }
+  return { typeList, rarityList, name, cardList, total, offset }
 }
