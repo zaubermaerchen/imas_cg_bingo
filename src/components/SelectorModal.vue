@@ -76,6 +76,7 @@ const selectCard = (card: Card | undefined) => {
       <li v-for="(card, index) in cardList" v-bind:key="index">
         <ImageBox v-bind:card="card" v-on:click="selectCard(card)" />
       </li>
+      <li><ImageBox v-on:click="selectCard(undefined)"></ImageBox></li>
     </ul>
 
     <el-pagination

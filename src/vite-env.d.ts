@@ -3,6 +3,7 @@ interface ViteTypeOptions {
 }
 
 interface ImportMetaEnv {
+  readonly VITE_API_SERVER_URL: string
   readonly VITE_IMAGE_SERVER_URL: string
 }
 
