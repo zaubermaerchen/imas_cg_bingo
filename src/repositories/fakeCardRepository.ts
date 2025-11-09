@@ -33,7 +33,6 @@ export default class FakeCardRepository implements RepositoryInterface {
       new Card(3200801, '日野茜', 2, 2, '2ba9aa6bf49a8d75a1cf6ae3a131de74'),
       new Card(3300802, '日野茜+', 2, 3, '3d0085be5f6add9c2d1eb2b484a02fbf'),
     ]
-    const total = cardList.length
 
     if (typeList.length > 0) {
       cardList = cardList.filter((card) => typeList.includes(card.type))
@@ -47,6 +46,7 @@ export default class FakeCardRepository implements RepositoryInterface {
       cardList = cardList.filter((card) => card.name.includes(name))
     }
 
+    const total = cardList.length
     cardList = cardList.slice(offset, offset + limit)
 
     return Promise.resolve([cardList, total])
