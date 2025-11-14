@@ -5,21 +5,24 @@ import { VueFinalModal } from 'vue-final-modal'
 import BingoArea from '@/components/BingoArea.vue'
 import ResultModal from '@/components/ResultModal.vue'
 import SettingModal from '@/components/SettingModal.vue'
-import Card, { type CardSize } from '@/models/card.ts'
+import Card from '@/models/card.ts'
+import Setting from '@/models/setting.ts'
 
-const row = ref(3)
-const column = ref(3)
-const cardSize = ref<CardSize>('m')
-const cardList = ref<Array<Card | undefined>>(Array.from({ length: row.value * column.value }))
+const setting = ref(new Setting())
+const cardList = ref<Array<Card | undefined>>(
+  Array.from({ length: setting.value.row * setting.value.column }),
+)
 
-watch([row, column], () => {
-  const count = row.value * column.value
-  if (cardList.value.length > count) {
-    cardList.value = cardList.value.slice(0, count)
-  } else if (cardList.value.length < count) {
-    cardList.value = cardList.value.concat(Array.from({ length: count - cardList.value.length }))
-  }
-})
+watch(
+  () => setting.value.row * setting.value.column,
+  (value) => {
+    if (cardList.value.length > value) {
+      cardList.value = cardList.value.slice(0, value)
+    } else if (cardList.value.length < value) {
+      cardList.value = cardList.value.concat(Array.from({ length: value - cardList.value.length }))
+    }
+  },
+)
 
 const isVisibleResultModal = ref(false)
 const showResultModal = () => {
@@ -34,7 +37,7 @@ const showSettingModal = () => {
 
 <template>
   <main>
-    <BingoArea v-bind:row="row" v-bind:column="column" v-model="cardList" />
+    <BingoArea v-bind:row="setting.row" v-bind:column="setting.column" v-model="cardList" />
     <el-button type="primary" v-on:click="showResultModal">画像生成</el-button>
     <el-button type="info" v-on:click="showSettingModal">設定</el-button>
   </main>
@@ -47,9 +50,9 @@ const showSettingModal = () => {
   >
     <ResultModal
       v-bind:cardList="cardList"
-      v-bind:row="row"
-      v-bind:column="column"
-      v-bind:size="cardSize"
+      v-bind:row="setting.row"
+      v-bind:column="setting.column"
+      v-bind:size="setting.cardSize"
     />
   </VueFinalModal>
 
@@ -59,6 +62,6 @@ const showSettingModal = () => {
     v-bind::click-to-close="true"
     v-bind:esc-to-close="true"
   >
-    <SettingModal v-model:row="row" v-model:column="column" v-model:cardSize="cardSize" />
+    <SettingModal v-model="setting" />
   </VueFinalModal>
 </template>
