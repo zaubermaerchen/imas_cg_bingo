@@ -1,7 +1,9 @@
 import { describe, it, expect, vi } from 'vitest'
+import { Random } from 'random'
 
 import Card from '@/models/card.ts'
-import { getCardImageSize, drawCardListToCanvas } from '@/utils/card.ts'
+import FakeCardRepository from '@/repositories/fakeCardRepository.ts'
+import { getCardImageSize, drawCardListToCanvas, fetchRandomCardList } from '@/utils/card.ts'
 import redImageUrl from '@/assets/red.png'
 import greeenImageUrl from '@/assets/green.png'
 
@@ -92,5 +94,47 @@ describe('drawCardListToCanvas', () => {
     expect(imageData[80000]).toBe(0) // R
     expect(imageData[80001]).toBe(255) // G
     expect(imageData[80002]).toBe(0) // B
+  })
+})
+
+describe('fetchRandomCardList', () => {
+  it('指定した枚数分のランダムなカードが取得できるか', async () => {
+    const cardRepository = new FakeCardRepository()
+    const randomizer = new Random('test-seed')
+
+    const cardList = await fetchRandomCardList(cardRepository, randomizer, [], [], 3)
+    expect(cardList.length).toBe(3)
+
+    expect(cardList.map((card) => card.id)).toStrictEqual([2300902, 3100202, 1001101])
+  })
+
+  it('属性を指定した場合、その属性のカードからランダムなカードが取得できるか', async () => {
+    const cardRepository = new FakeCardRepository()
+    const randomizer = new Random('test-seed')
+
+    const cardList = await fetchRandomCardList(cardRepository, randomizer, [0], [], 3)
+    expect(cardList.length).toBe(3)
+
+    expect(cardList.map((card) => card.id)).toStrictEqual([1101302, 1513402, 1000101])
+  })
+
+  it('レアリティを指定した場合、そのレアリティのカードからランダムなカードが取得できるか', async () => {
+    const cardRepository = new FakeCardRepository()
+    const randomizer = new Random('test-seed')
+
+    const cardList = await fetchRandomCardList(cardRepository, randomizer, [], [1], 3)
+    expect(cardList.length).toBe(3)
+
+    expect(cardList.map((card) => card.id)).toStrictEqual([2100802, 3100202, 1100102])
+  })
+
+  it('取得上限を変更した場合、正常に動作するか', async () => {
+    const cardRepository = new FakeCardRepository()
+    const randomizer = new Random('test-seed')
+
+    const cardList = await fetchRandomCardList(cardRepository, randomizer, [], [], 1)
+    expect(cardList.length).toBe(1)
+
+    expect(cardList.map((card) => card.id)).toStrictEqual([2300902])
   })
 })

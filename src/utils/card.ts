@@ -1,7 +1,17 @@
+import { Random } from 'random'
+
 import Card, { type CardSize } from '@/models/card.ts'
 import { loadImage } from '@/utils/canvas.ts'
+import type CardRepositoryInterface from '@/repositories/cardRepositoryInterface.ts'
 
-export const getCardImageSize = (size: CardSize) => {
+/**
+ * カード画像サイズ取得
+ *
+ * @param {CardSize} size カードサイズ
+ *
+ * @returns {width: number; height: number} カード画像の幅と高さ
+ */
+export const getCardImageSize = (size: CardSize): { width: number; height: number } => {
   switch (size) {
     case 's':
       return { width: 130, height: 163 }
@@ -19,13 +29,24 @@ export const getCardImageSize = (size: CardSize) => {
   }
 }
 
+/**
+ * カード画像サイズ取得
+ *
+ * @param {HTMLCanvasElement}    canvas   描画先のcanvas要素
+ * @param {(Card | undefined)[]} cardList カードリスト
+ * @param {number}               row      行数
+ * @param {number}               column   列数
+ * @param {CardSize}             size     カードサイズ
+ *
+ * @returns {Promise<void>} 描画完了を示すPromise
+ */
 export const drawCardListToCanvas = async (
   canvas: HTMLCanvasElement,
   cardList: (Card | undefined)[],
   row: number,
   column: number,
   size: CardSize,
-) => {
+): Promise<void> => {
   const ctx = canvas.getContext('2d')
   if (ctx === null) {
     return
@@ -52,4 +73,38 @@ export const drawCardListToCanvas = async (
     )
   })
   await Promise.all(promiseList)
+}
+
+/**
+ * ランダムにカードを取得する
+ *
+ * @param {CardRepositoryInterface} cardRepository カードリポジトリ
+ * @param {Random}                  randomizer     ランダムジェネレーター
+ * @param {number[]}                typeList       属性
+ * @param {number[]}                rarityList     レアリティ
+ * @param {number}                  limit          取得上限
+ *
+ * @returns {Promise<Card[]>} ランダムに選ばれたカードリスト
+ */
+export const fetchRandomCardList = async (
+  cardRepository: CardRepositoryInterface,
+  randomizer: Random,
+  typeList: number[],
+  rarityList: number[],
+  limit: number,
+): Promise<Card[]> => {
+  const [_, count] = await cardRepository.search(typeList, rarityList, undefined, 1, 0)
+
+  const f = async (offset: number) => {
+    const result = await cardRepository.search(typeList, rarityList, undefined, 1, offset)
+    return result[0][0]!
+  }
+
+  const promiseList: Promise<Card>[] = []
+  for (let i = 0; i < limit; i++) {
+    const offset = randomizer.int(0, count - 1)
+    promiseList.push(f(offset))
+  }
+
+  return await Promise.all(promiseList)
 }

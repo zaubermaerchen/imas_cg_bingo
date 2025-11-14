@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "element-plus": "^2.11.5",
+    "random": "^5.4.1",
     "vue": "^3.5.22",
     "vue-draggable-plus": "^0.6.0",
     "vue-final-modal": "^4.5.5"
