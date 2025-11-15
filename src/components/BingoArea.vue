@@ -56,6 +56,9 @@ ul.bingo {
   display: flex;
   flex-wrap: wrap;
   padding: 0;
+}
+
+ul.bingo > li {
   font-size: 0;
 }
 </style>
