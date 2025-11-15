@@ -6,15 +6,13 @@ import BingoArea from '@/components/BingoArea.vue'
 import ResultModal from '@/components/ResultModal.vue'
 import SettingModal from '@/components/SettingModal.vue'
 import Card from '@/models/card.ts'
-import Setting from '@/models/setting.ts'
+import { useSettingStore } from '@/stores/setting.ts'
 
-const setting = ref(new Setting())
-const cardList = ref<Array<Card | undefined>>(
-  Array.from({ length: setting.value.row * setting.value.column }),
-)
+const setting = useSettingStore()
+const cardList = ref<Array<Card | undefined>>(Array.from({ length: setting.row * setting.column }))
 
 watch(
-  () => setting.value.row * setting.value.column,
+  () => setting.row * setting.column,
   (value) => {
     if (cardList.value.length > value) {
       cardList.value = cardList.value.slice(0, value)
@@ -62,6 +60,9 @@ const showSettingModal = () => {
     v-bind::click-to-close="true"
     v-bind:esc-to-close="true"
   >
-    <SettingModal v-model="setting" />
+    <SettingModal
+      v-on:confirm="isVisibleSettingModal = false"
+      v-on:cancel="isVisibleSettingModal = false"
+    />
   </VueFinalModal>
 </template>
