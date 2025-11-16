@@ -1,0 +1,25 @@
+{
+  "name": "imas_cg_bingo",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/schlich/devcontainer-features/playwright:0": {
+      "browsers": "chromium"
+    }
+  },
+  "forwardPorts": [5173],
+  "postCreateCommand": "npm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Vue.volar",
+        "vitest.explorer",
+        "dbaeumer.vscode-eslint",
+        "EditorConfig.EditorConfig",
+        "oxc.oxc-vscode",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+  "remoteUser": "node"
+}
