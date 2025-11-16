@@ -63,7 +63,7 @@ const cancel = () => {
 </script>
 
 <template>
-  <el-container class="selector-modal">
+  <el-container id="selector-modal">
     <el-header>
       <h2>カード選択</h2>
     </el-header>
@@ -102,8 +102,14 @@ const cancel = () => {
       </el-scrollbar>
     </el-main>
     <el-footer>
-      <el-button v-on:click="confirm">OK</el-button>
-      <el-button v-on:click="cancel">キャンセル</el-button>
+      <ul class="button-list">
+        <li>
+          <el-button v-on:click="confirm">OK</el-button>
+        </li>
+        <li>
+          <el-button v-on:click="cancel">キャンセル</el-button>
+        </li>
+      </ul>
     </el-footer>
   </el-container>
 </template>

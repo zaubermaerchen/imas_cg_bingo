@@ -56,17 +56,18 @@ footer > ul.button-list > li {
   width: 100%;
 }
 
-.selector-modal {
+#selector-modal {
   color: black;
   background-color: white;
 }
-.selector-modal .el-main {
+#selector-modal > .el-main {
   padding-top: 0;
 }
-.selector-modal .el-footer {
+#selector-modal > .el-footer {
   text-align: right;
 }
-.selector-modal ul.card-list {
+#selector-modal ul.card-list {
+  list-style: none;
   width: 500px;
   display: flex;
   flex-wrap: wrap;
@@ -76,15 +77,15 @@ footer > ul.button-list > li {
   align-content: baseline;
   font-size: 0;
 }
-.selector-modal ul.card-list > li {
+#selector-modal ul.card-list > li {
   margin: 0;
   padding: 0;
 }
-.selector-modal ul.card-list > li > div {
+#selector-modal ul.card-list > li > div {
   position: relative;
   display: inline-block;
 }
-.selector-modal ul.card-list > li > div.selected::before {
+#selector-modal ul.card-list > li > div.selected::before {
   content: '';
   position: absolute;
   top: 0;
@@ -102,4 +103,19 @@ footer > ul.button-list > li {
 }
 #setting-modal > .el-main {
   padding-top: 0;
+}
+
+#result-modal {
+  position: relative;
+  display: inline-block;
+}
+#result-modal > * {
+  max-width: 95vw;
+  max-height: 95vh;
+  object-fit: contain;
+}
+#result-modal > img {
+  position: absolute;
+  top: 0;
+  left: 0;
 }

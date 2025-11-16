@@ -32,25 +32,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="result-modal">
+  <section id="result-modal">
     <canvas ref="canvas"></canvas>
     <img v-if="imagePath" v-bind:src="imagePath" alt="generated image" />
   </section>
 </template>
-
-<style scoped>
-.result-modal {
-  position: relative;
-  display: inline-block;
-}
-.result-modal > * {
-  max-width: 95vw;
-  max-height: 95vh;
-  object-fit: contain;
-}
-.result-modal > img {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-</style>
