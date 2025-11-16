@@ -55,6 +55,9 @@ export default class CardRepository implements RepositoryInterface {
         credentials: 'omit',
       },
     )
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`)
+    }
 
     const data: ResponseData = await response.json()
 
@@ -63,6 +66,6 @@ export default class CardRepository implements RepositoryInterface {
     )
     const total = data.count
 
-    return Promise.resolve([cardList, total])
+    return [cardList, total]
   }
 }

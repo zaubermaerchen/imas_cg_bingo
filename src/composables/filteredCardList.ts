@@ -15,15 +15,19 @@ export function useFilteredCardList(
   const offset = ref(0)
 
   const fetchCardList = async () => {
-    const result = await cardRepository.search(
-      typeList.value,
-      rarityList.value,
-      name.value,
-      limit,
-      offset.value,
-    )
-    cardList.value = [...cardList.value, ...result[0]]
-    total.value = result[1]
+    try {
+      const result = await cardRepository.search(
+        typeList.value,
+        rarityList.value,
+        name.value,
+        limit,
+        offset.value,
+      )
+      cardList.value = [...cardList.value, ...result[0]]
+      total.value = result[1]
+    } catch (error) {
+      console.error('Failed to fetch card list:', error)
+    }
   }
 
   void fetchCardList()

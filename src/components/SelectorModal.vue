@@ -45,7 +45,7 @@ const displayedRarityList = computed({
 const displayedName = computed({
   get: () => name.value ?? '',
   set: (value: string) => {
-    name.value = value !== '' ? value : undefined
+    name.value = value.trim().length > 0 ? value : undefined
   },
 })
 
