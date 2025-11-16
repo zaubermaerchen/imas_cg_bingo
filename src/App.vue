@@ -35,8 +35,8 @@ const autoSelectCardList = async () => {
   cardList.value = await fetchRandomCardList(
     cardRepository,
     randomizer,
-    [],
-    [],
+    setting.autoSelect.typeList,
+    setting.autoSelect.rarityList,
     cardList.value.length,
   )
 }
@@ -46,19 +46,31 @@ const isVisibleSettingModal = ref(false)
 </script>
 
 <template>
-  <main>
-    <el-container>
-      <el-main>
-        <BingoArea v-bind:row="setting.row" v-bind:column="setting.column" v-model="cardList" />
-      </el-main>
-      <el-footer>
-        <el-button type="primary" v-on:click="isVisibleResultModal = true">画像生成</el-button>
-        <el-button type="danger" v-on:click="resetCardList">リセット</el-button>
-        <el-button v-on:click="autoSelectCardList">ランダム選択</el-button>
-        <el-button type="info" v-on:click="isVisibleSettingModal = true">設定</el-button>
-      </el-footer>
-    </el-container>
-  </main>
+  <div id="app-main">
+    <header>
+      <ul class="button-list">
+        <li>
+          <el-button v-on:click="autoSelectCardList">ランダム選択</el-button>
+        </li>
+        <li>
+          <el-button type="info" v-on:click="isVisibleSettingModal = true">設定</el-button>
+        </li>
+      </ul>
+    </header>
+    <main>
+      <BingoArea v-bind:row="setting.row" v-bind:column="setting.column" v-model="cardList" />
+    </main>
+    <footer>
+      <ul class="button-list">
+        <li>
+          <el-button type="primary" v-on:click="isVisibleResultModal = true">画像生成</el-button>
+        </li>
+        <li>
+          <el-button type="danger" v-on:click="resetCardList">リセット</el-button>
+        </li>
+      </ul>
+    </footer>
+  </div>
 
   <VueFinalModal
     class="modal"
