@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, inject } from 'vue'
 import { VueFinalModal } from 'vue-final-modal'
+import { Random } from 'random'
 
 import BingoArea from '@/components/BingoArea.vue'
 import ResultModal from '@/components/ResultModal.vue'
 import SettingModal from '@/components/SettingModal.vue'
 import Card from '@/models/card.ts'
 import { useSettingStore } from '@/stores/setting.ts'
+import { fetchRandomCardList } from '@/utils/card.ts'
+import { CardRepositoryInjectKey } from '@/plugins/dependencyProviderPlugin.ts'
 
 const setting = useSettingStore()
 const cardList = ref<Array<Card | undefined>>(Array.from({ length: setting.row * setting.column }))
@@ -26,15 +29,20 @@ const resetCardList = () => {
   cardList.value = Array.from({ length: cardList.value.length })
 }
 
-const isVisibleResultModal = ref(false)
-const showResultModal = () => {
-  isVisibleResultModal.value = true
+const randomizer = new Random()
+const cardRepository = inject(CardRepositoryInjectKey)!
+const autoSelectCardList = async () => {
+  cardList.value = await fetchRandomCardList(
+    cardRepository,
+    randomizer,
+    [],
+    [],
+    cardList.value.length,
+  )
 }
 
+const isVisibleResultModal = ref(false)
 const isVisibleSettingModal = ref(false)
-const showSettingModal = () => {
-  isVisibleSettingModal.value = true
-}
 </script>
 
 <template>
@@ -44,9 +52,10 @@ const showSettingModal = () => {
         <BingoArea v-bind:row="setting.row" v-bind:column="setting.column" v-model="cardList" />
       </el-main>
       <el-footer>
-        <el-button type="primary" v-on:click="showResultModal">画像生成</el-button>
+        <el-button type="primary" v-on:click="isVisibleResultModal = true">画像生成</el-button>
         <el-button type="danger" v-on:click="resetCardList">リセット</el-button>
-        <el-button type="info" v-on:click="showSettingModal">設定</el-button>
+        <el-button v-on:click="autoSelectCardList">ランダム選択</el-button>
+        <el-button type="info" v-on:click="isVisibleSettingModal = true">設定</el-button>
       </el-footer>
     </el-container>
   </main>
