@@ -22,6 +22,10 @@ watch(
   },
 )
 
+const resetCardList = () => {
+  cardList.value = Array.from({ length: cardList.value.length })
+}
+
 const isVisibleResultModal = ref(false)
 const showResultModal = () => {
   isVisibleResultModal.value = true
@@ -35,9 +39,16 @@ const showSettingModal = () => {
 
 <template>
   <main>
-    <BingoArea v-bind:row="setting.row" v-bind:column="setting.column" v-model="cardList" />
-    <el-button type="primary" v-on:click="showResultModal">画像生成</el-button>
-    <el-button type="info" v-on:click="showSettingModal">設定</el-button>
+    <el-container>
+      <el-main>
+        <BingoArea v-bind:row="setting.row" v-bind:column="setting.column" v-model="cardList" />
+      </el-main>
+      <el-footer>
+        <el-button type="primary" v-on:click="showResultModal">画像生成</el-button>
+        <el-button type="danger" v-on:click="resetCardList">リセット</el-button>
+        <el-button type="info" v-on:click="showSettingModal">設定</el-button>
+      </el-footer>
+    </el-container>
   </main>
 
   <VueFinalModal

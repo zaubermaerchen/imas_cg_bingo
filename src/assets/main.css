@@ -19,3 +19,41 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+.selector-modal {
+  color: black;
+  background-color: white;
+}
+.selector-modal .el-main {
+  padding-top: 0;
+}
+.selector-modal .el-footer {
+  text-align: right;
+}
+.selector-modal ul.card-list {
+  width: 500px;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0;
+  margin: 0;
+  padding: 0;
+  align-content: baseline;
+  font-size: 0;
+}
+.selector-modal ul.card-list > li {
+  margin: 0;
+  padding: 0;
+}
+.selector-modal ul.card-list > li > div {
+  position: relative;
+  display: inline-block;
+}
+.selector-modal ul.card-list > li > div.selected::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}

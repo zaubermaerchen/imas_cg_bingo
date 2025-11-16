@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
+import { ref, computed, inject } from 'vue'
 import ImageBox from '@/components/ImageBox.vue'
 import Card from '@/models/card.ts'
 import { useFilteredCardList } from '@/composables/filteredCardList'
@@ -7,12 +7,14 @@ import { CardRepositoryInjectKey } from '@/plugins/dependencyProviderPlugin.ts'
 
 interface Emits {
   (e: 'confirm'): void
+  (e: 'cancel'): void
 }
 
 const target = defineModel<Card | undefined>({ required: true })
+const selected = ref<Card | undefined>(target.value)
 const emits = defineEmits<Emits>()
 
-const limitPerPage = 10
+const limitPerPage = 20
 
 const cardRepository = inject(CardRepositoryInjectKey)!
 const { typeList, rarityList, name, cardList, total, offset } = useFilteredCardList(
@@ -20,12 +22,11 @@ const { typeList, rarityList, name, cardList, total, offset } = useFilteredCardL
   target.value,
   limitPerPage,
 )
-const page = computed({
-  get: () => offset.value / limitPerPage + 1,
-  set: (value: number) => {
-    offset.value = (value - 1) * limitPerPage
-  },
-})
+const load = () => {
+  if (cardList.value.length < total.value) {
+    offset.value += limitPerPage
+  }
+}
 
 const displayedTypeList = computed({
   get: () => typeList.value.map((v) => String(v)),
@@ -49,79 +50,60 @@ const displayedName = computed({
 })
 
 const selectCard = (card: Card | undefined) => {
-  target.value = card
+  selected.value = card
+}
+
+const confirm = () => {
+  target.value = selected.value
   emits('confirm')
+}
+const cancel = () => {
+  emits('cancel')
 }
 </script>
 
 <template>
-  <section class="selector-modal">
-    <el-form label-position="right" label-width="100px">
-      <el-form-item label="カード名">
-        <el-input v-model="displayedName" name="name" placeholder="カード名" />
-      </el-form-item>
-      <el-form-item label="タイプ">
-        <el-checkbox-group v-model="displayedTypeList">
-          <el-checkbox value="0">キュート</el-checkbox>
-          <el-checkbox value="1">クール</el-checkbox>
-          <el-checkbox value="2">パッション</el-checkbox>
-        </el-checkbox-group>
-      </el-form-item>
-      <el-form-item label="レアリティ">
-        <el-checkbox-group v-model="displayedRarityList">
-          <el-checkbox value="0">N</el-checkbox>
-          <el-checkbox value="1">N+</el-checkbox>
-          <el-checkbox value="2">R</el-checkbox>
-          <el-checkbox value="3">R+</el-checkbox>
-          <el-checkbox value="4">SR</el-checkbox>
-          <el-checkbox value="5">SR+</el-checkbox>
-        </el-checkbox-group>
-      </el-form-item>
-    </el-form>
+  <el-container class="selector-modal">
+    <el-header>
+      <h2>カード選択</h2>
+    </el-header>
+    <el-main>
+      <el-form label-position="right" label-width="100px">
+        <el-form-item label="カード名">
+          <el-input v-model="displayedName" name="name" placeholder="カード名" />
+        </el-form-item>
+        <el-form-item label="タイプ">
+          <el-checkbox-group v-model="displayedTypeList">
+            <el-checkbox value="0">キュート</el-checkbox>
+            <el-checkbox value="1">クール</el-checkbox>
+            <el-checkbox value="2">パッション</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="レアリティ">
+          <el-checkbox-group v-model="displayedRarityList">
+            <el-checkbox value="0">N</el-checkbox>
+            <el-checkbox value="1">N+</el-checkbox>
+            <el-checkbox value="2">R</el-checkbox>
+            <el-checkbox value="3">R+</el-checkbox>
+            <el-checkbox value="4">SR</el-checkbox>
+            <el-checkbox value="5">SR+</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+      </el-form>
 
-    <ul>
-      <li v-for="(card, index) in cardList" v-bind:key="index">
-        <ImageBox v-bind:card="card" v-on:click="selectCard(card)" />
-      </li>
-      <li><ImageBox v-on:click="selectCard(undefined)"></ImageBox></li>
-    </ul>
-
-    <el-pagination
-      v-model:currentPage="page"
-      background
-      layout="prev, pager, next"
-      v-bind:total="total"
-      v-bind:page-size="limitPerPage"
-    />
-  </section>
+      <el-scrollbar height="300px" @end-reached="load">
+        <ul class="card-list">
+          <li v-for="(card, index) in cardList" v-bind:key="index">
+            <div v-bind:class="{ selected: card?.id === selected?.id }">
+              <ImageBox v-bind:card="card" v-on:click="selectCard(card)" />
+            </div>
+          </li>
+        </ul>
+      </el-scrollbar>
+    </el-main>
+    <el-footer>
+      <el-button v-on:click="confirm">OK</el-button>
+      <el-button v-on:click="cancel">キャンセル</el-button>
+    </el-footer>
+  </el-container>
 </template>
-
-<style>
-section.selector-modal {
-  padding: 2em;
-  color: black;
-  background-color: white;
-}
-section.selector-modal > ul {
-  width: 500px;
-  max-width: 500px;
-  display: flex;
-  flex-wrap: wrap;
-  font-size: 0;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding: 0;
-  min-height: 300px;
-  align-content: baseline;
-  font-size: 0;
-}
-section.selector-modal > ul > li {
-  margin: 0;
-  padding: 0;
-}
-
-.el-pagination {
-  display: flex !important;
-  justify-content: center;
-}
-</style>

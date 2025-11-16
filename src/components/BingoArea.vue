@@ -46,7 +46,11 @@ const hideSelectorModal = () => {
     v-bind::click-to-close="true"
     v-bind:esc-to-close="true"
   >
-    <SelectorModal v-model="targetCard" v-on:confirm="hideSelectorModal" />
+    <SelectorModal
+      v-model="targetCard"
+      v-on:confirm="hideSelectorModal"
+      v-on:cancel="hideSelectorModal"
+    />
   </VueFinalModal>
 </template>
 
@@ -55,10 +59,8 @@ ul.bingo {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
+  margin: 0;
   padding: 0;
-}
-
-ul.bingo > li {
   font-size: 0;
 }
 </style>

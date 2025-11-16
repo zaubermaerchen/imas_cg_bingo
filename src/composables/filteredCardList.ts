@@ -22,14 +22,18 @@ export function useFilteredCardList(
       limit,
       offset.value,
     )
-    cardList.value = result[0]
+    cardList.value = [...cardList.value, ...result[0]]
     total.value = result[1]
   }
 
   void fetchCardList()
   watch([typeList, rarityList, name], async () => {
+    cardList.value = []
+    if (offset.value === 0) {
+      await fetchCardList()
+      return
+    }
     offset.value = 0
-    await fetchCardList()
   })
   watch([offset], fetchCardList)
 
