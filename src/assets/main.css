@@ -63,9 +63,6 @@ footer > ul.button-list > li {
 #selector-modal > .el-main {
   padding-top: 0;
 }
-#selector-modal > .el-footer {
-  text-align: right;
-}
 #selector-modal ul.card-list {
   list-style: none;
   width: 500px;
@@ -81,11 +78,28 @@ footer > ul.button-list > li {
   margin: 0;
   padding: 0;
 }
-#selector-modal ul.card-list > li > div {
+#selector-modal ul.card-list > li > button {
   position: relative;
   display: inline-block;
+  padding: 0;
+  border: none;
+  font-size: 0;
+  cursor: pointer;
 }
-#selector-modal ul.card-list > li > div.selected::before {
+#selector-modal ul.card-list > li > button:focus,
+#selector-modal ul.card-list > li > button:hover {
+  outline: none;
+}
+#selector-modal ul.card-list > li > button:focus::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+#selector-modal ul.card-list > li > button:disabled::before {
   content: '';
   position: absolute;
   top: 0;

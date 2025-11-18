@@ -10,7 +10,7 @@ export function useFilteredCardList(
   const typeList = ref<number[]>(currentCard ? [currentCard.type] : [])
   const rarityList = ref<number[]>(currentCard ? [currentCard.rarity] : [])
   const name = ref<string | undefined>(currentCard?.name)
-  const cardList = ref<Array<Card | undefined>>([])
+  const cardList = ref<Card[]>([])
   const total = ref(0)
   const offset = ref(0)
 
