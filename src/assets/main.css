@@ -42,6 +42,7 @@ footer > ul.button-list > li {
 }
 #app-main > header {
   width: 100%;
+  margin-bottom: 1em;;
 }
 #app-main > header > ul {
   justify-content: flex-start;
@@ -50,10 +51,18 @@ footer > ul.button-list > li {
   margin-right: 0.5em;
 }
 #app-main > main {
-  margin: 1em 0;
+  background-color: black;
+  min-width: 300px;
+  min-height: 300px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 #app-main > footer {
   width: 100%;
+  margin-top: 1em;
 }
 
 #selector-modal {
