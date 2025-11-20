@@ -15,8 +15,8 @@ export interface Setting {
 
 export const useSettingStore = defineStore<string, Setting>('setting', {
   state: () => ({
-    row: 3,
-    column: 3,
+    row: 5,
+    column: 5,
     cardSize: 'm',
     autoSelect: {
       typeList: [],
