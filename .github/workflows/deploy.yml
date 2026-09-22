@@ -16,17 +16,11 @@ jobs:
       name: production
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: Create .env.production.local
         run: echo "${{ secrets.DOTENV }}" > .env.production.local
-      - name: Install Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: '24.x'
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
-        with:
-          version: latest
+      - name: Setup tools
+        uses: jdx/mise-action@v4
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Build
